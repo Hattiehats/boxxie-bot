@@ -235,7 +235,7 @@ function getFirstOCForMun(munName) {
 
 const VALID_TYPES = new Set(["work", "hustle", "overtime", "scavenge", "suckup", "sabotage", "steal", "cooperate"]);
 
-async function mainFunction(dailyType, userId, reply, ephemeralReply) {
+async function mainFunction(dailyType, userId, reply) {
 	// Find the player's mun
 	const allMuns = getTableData("muns");
 	const munData = allMuns.find((row) => row.id === userId);
@@ -272,7 +272,7 @@ async function mainFunction(dailyType, userId, reply, ephemeralReply) {
 	// Check daily availability
 	const availability = checkDailyAvailability(ocName);
 	if (!availability.canUse) {
-		return (ephemeralReply || reply)({
+		return (reply)({
 			components: [
 				new ContainerBuilder()
 					.setAccentColor(11326574)
@@ -474,21 +474,11 @@ export default {
 	async execute(interaction) {
 		const dailyType = interaction.options.getString("type");
 		const userId = interaction.user.id;
-		let deferred = false;
+		await interaction.deferReply();
 		const reply = async (payload) => {
-			if (!deferred) {
-				await interaction.deferReply();
-				deferred = true;
-			}
 			return interaction.editReply(payload);
 		};
-		const ephemeralReply = async (payload) => {
-			return interaction.reply({
-				...payload,
-				flags: (payload.flags || 0) | MessageFlags.Ephemeral,
-			});
-		};
-		await mainFunction(dailyType, userId, reply, ephemeralReply);
+		await mainFunction(dailyType, userId, reply);
 	},
 	async executePrefix(message, args) {
 		const dailyType = args?.trim().split(/\s+/)[0]?.toLowerCase();
@@ -498,6 +488,7 @@ export default {
 			return;
 		}
 		const userId = message.author.id;
-		await mainFunction(dailyType, userId, (payload) => message.reply(payload));
+		await interaction.deferReply();
+		await mainFunction(dailyType, userId, (payload) => interaction.editReply(payload));
 	},
 };
