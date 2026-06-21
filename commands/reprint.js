@@ -66,13 +66,14 @@ function setComponent(ocName){
     
     return components;
 }
-
+	
 async function reprintMessage(interaction){
+    await interaction.deferReply();
+	    let error = false;
     const ocName = interaction.options.getString("oc");
 
     const reprintContent = `### ${ocName} has been reprinted without error. Happy printday! 🎉`;
     const errorContent = `\`\`\`While reprinting ${ocName}, something went wrong! They experienced a REPRINTING ERROR. You may decide the error for yourself, or you may roll 1d10 to pick an error from this table. Effects may be flavored however you like.\`\`\`\n**You come back from the printer...**\n> \`1.)\` - With a different hair and/or eye color.\n> \`2.)\` - 1d6 inches shorter.\n> \`3.)\` - 1d6 inches taller.\n> \`4.)\` - Differently colored blood.\n> \`5.)\` - With impaired functioning in part of their body.\n> \`6.)\` - With a seemingly permanent illness they didn't have before. \n> \`7.)\` - With sudden chronic pain.\n> \`8.)\` - With personality change. (Less irritable, etc.)\n> \`9.)\` - With a gap in their memory.\n> \`10.)\` - Missing part of their body.\`\`\`This error will impact you until your next reprinting.\`\`\``;
-
     const reprintConfirmMessage = [
         new ContainerBuilder()
         .setAccentColor(11326574)
@@ -88,17 +89,21 @@ async function reprintMessage(interaction){
                 new TextDisplayBuilder().setContent(errorContent),
             )
     ];
+    try { 
 
     const characterObject = new Character(ocName);
-    const error = await characterObject.reprint();
-
+    error = await characterObject.reprint();
+    } catch (err) {
+     console.log("ERROR IN REPRINT");
+     console.log(err);
+    }
     if (error) {
-        await interaction.reply({
+        await interaction.editReply({
             components: errorMessage,
             flags: [MessageFlags.IsComponentsV2],
         });
     } else {
-        await interaction.reply({
+        await interaction.editReply({
             components: reprintConfirmMessage,
             flags: [MessageFlags.IsComponentsV2],
         });
