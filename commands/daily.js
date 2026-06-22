@@ -30,11 +30,11 @@ const commandBuilder = new SlashCommandBuilder()
 			.setDescription("What kind of daily do you want to do?")
 			.setRequired(true)
 			.addChoices(
-				{ name: "Work — Safe 5 scrip", value: "work" },
-				{ name: "Grind — 2-10 scrip", value: "grind" },
+				{ name: "Work — Safe 5 capital", value: "work" },
+				{ name: "Grind — 2-10 capital", value: "grind" },
 				{ name: "Appease — Coin flip", value: "appease" },
-				{ name: "Fuck Around and Find Out— -5 to +15 scrip (flavor from another OC)", value: "fuckaround" },
-				{ name: "Team Up — You get -3 to +5 scrip, another OC gets +10 to +15", value: "teamup" },
+				{ name: "Fuck Around and Find Out— -5 to +15 capital (flavor from another OC)", value: "fuckaround" },
+				{ name: "Team Up — You get -3 to +5 capital, another OC gets +10 to +15", value: "teamup" },
 			),
 	);
 
@@ -118,7 +118,7 @@ function rollWork() {
 function rollHustle() {
 	// 2 to 10, EV = 6
 	const amount = Math.floor(Math.random() * 9) + 2;
-	return { amount, description: `You hustled and made **${amount}** scrip.` };
+	return { amount, description: `You hustled and made **${amount}** capital.` };
 }
 
 function rollSteal() {
@@ -126,8 +126,8 @@ function rollSteal() {
 	const amount = Math.floor(Math.random() * 36) - 10;
 	return {
 		amount, description: amount >= 0
-			? `You got away with **${amount}** scrip!`
-			: `You got caught! You were fined **${Math.abs(amount)}** scrip.`
+			? `You got away with **${amount}** capital!`
+			: `You got caught! You were fined **${Math.abs(amount)}** capital.`
 	};
 }
 
@@ -136,14 +136,14 @@ function rollScavenge() {
 	const roll = Math.random();
 	if (roll < 0.8) {
 		const amount = Math.floor(Math.random() * 3) + 1;
-		return { amount, item: null, description: `You dug through the trash and found **${amount}** scrip.` };
+		return { amount, item: null, description: `You dug through the trash and found **${amount}** capital.` };
 	} else if (roll < 0.9) {
-		return { amount: 30, item: null, description: "You found someone's lost wallet! **30** scrip!" };
+		return { amount: 30, item: null, description: "You found someone's lost wallet! **30** capital!" };
 	} else {
 		// Item from Trash gacha pool
 		const trashItems = getGachaItems("Trash");
 		if (trashItems.length === 0) {
-			return { amount: 1, item: null, description: "You dug through the trash but found nothing useful. **1** scrip for your trouble." };
+			return { amount: 1, item: null, description: "You dug through the trash but found nothing useful. **1** capital for your trouble." };
 		}
 		// Use weighted pool like gacha
 		const pool = [];
@@ -160,8 +160,8 @@ function rollSuckup() {
 	// 50% → 0, 50% → 12. EV = 6
 	const success = Math.random() < 0.5;
 	return success
-		? { amount: 12, description: "The boss loved it! Bonus: **12** scrip." }
-		: { amount: 0, description: "The boss saw right through you. **0** scrip today." };
+		? { amount: 12, description: "The boss loved it! Bonus: **12** capital." }
+		: { amount: 0, description: "The boss saw right through you. **0** capital today." };
 }
 
 function rollSabotage() {
@@ -169,20 +169,20 @@ function rollSabotage() {
 	const amount = Math.floor(Math.random() * 21) - 5;
 	return {
 		amount, description: amount >= 0
-			? `You got paid **${amount}** scrip by a rival department.`
-			: `You got caught! You paid **${Math.abs(amount)}** scrip in damages.`
+			? `You got paid **${amount}** capital by a rival department.`
+			: `You got caught! You paid **${Math.abs(amount)}** capital in damages.`
 	};
 }
 
 function rollOvertime() {
-	// 8 scrip, 20% chance of exhaustion (can't do daily tomorrow)
+	// 8 capital, 20% chance of exhaustion (can't do daily tomorrow)
 	const exhausted = Math.random() < 0.2;
 	return {
 		amount: 8,
 		exhausted,
 		description: exhausted
-			? "You made **8** scrip but passed out at your desk. You'll be too exhausted to work tomorrow."
-			: "You put in the extra hours and earned **8** scrip.",
+			? "You made **8** capital but passed out at your desk. You'll be too exhausted to work tomorrow."
+			: "You put in the extra hours and earned **8** capital.",
 	};
 }
 
@@ -194,7 +194,7 @@ function rollCooperate() {
 			amount: 15,
 			partnerAmount: 15,
 			jackpot: true,
-			description: "The synergy actually hits! You both get **15** scrip!",
+			description: "The synergy actually hits! You both get **15** capital!",
 		};
 	}
 	// Normal: player gets -3 to +5, partner gets 10-15
@@ -205,8 +205,8 @@ function rollCooperate() {
 		partnerAmount,
 		jackpot: false,
 		description: amount >= 0
-			? `You helped out and earned **${amount}** scrip for yourself.`
-			: `You lost **${Math.abs(amount)}** scrip covering for them, but they made bank.`,
+			? `You helped out and earned **${amount}** capital for yourself.`
+			: `You lost **${Math.abs(amount)}** capital covering for them, but they made bank.`,
 	};
 }
 
@@ -324,7 +324,7 @@ async function mainFunction(dailyType, userId, reply) {
 			result = rollWork();
 	}
 
-	// Give partner their scrip (cooperate)
+	// Give partner their capital (cooperate)
 	if (result.partnerAmount && targetOC) {
 		const targetMunData = targetOC.mun ? getData("muns", "name", targetOC.mun) : null;
 		if (targetMunData) {
@@ -332,7 +332,7 @@ async function mainFunction(dailyType, userId, reply) {
 				const partnerMun = new Mun(targetMunData.name);
 				await partnerMun.addScrip(result.partnerAmount);
 			} catch (e) {
-				console.error("Daily cooperate: Failed to give partner scrip:", e);
+				console.error("Daily cooperate: Failed to give partner capital:", e);
 			}
 		}
 	}
@@ -450,7 +450,7 @@ async function mainFunction(dailyType, userId, reply) {
 		footerParts.push(`-# 😴 Too exhausted to work tomorrow.`);
 	}
 	if (result.partnerAmount && targetOC) {
-		footerParts.push(`-# 🤝 ${targetOC.name} received ${result.partnerAmount} scrip`);
+		footerParts.push(`-# 🤝 ${targetOC.name} received ${result.partnerAmount} capital`);
 	}
 
 	container.addTextDisplayComponents(
@@ -488,7 +488,6 @@ export default {
 			return;
 		}
 		const userId = message.author.id;
-		await interaction.deferReply();
-		await mainFunction(dailyType, userId, (payload) => interaction.editReply(payload));
+		await mainFunction(dailyType, userId, (payload) => message.reply(payload));
 	},
 };
