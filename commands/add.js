@@ -21,7 +21,10 @@ const commandBuilder = new SlashCommandBuilder()
 	.addStringOption((option) =>
 		option
 			.setName('currency')
-			.setChoices(["capital", "tokens"])
+			.addChoices(
+				{ name: "Capital", value: "capital" },
+				{ name: "Tokens", value: "tokens" },
+			)
 	)
 
 /**
