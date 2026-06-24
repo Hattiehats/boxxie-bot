@@ -539,6 +539,7 @@ export class Mun extends DBTable {
 		this.timezone = this.data.timezone;
 		this.capital = sanitizeCurrency(this.data.capital);
 		this.lifetimeCapital = sanitizeCurrency(this.data.lifetimeCapital);
+		this.tokens = sanitizeCurrency(this.data.tokens);
 		this.id = this.data.id;
 		this.status = this.data.status;
 		this.ocs = this.data.ocs;
@@ -550,30 +551,35 @@ export class Mun extends DBTable {
 		})();
 	}
 
-	async setScrip(setAmount) {
-		this.capital = setAmount
-		await super.changeProperty('capital', this.capital)
+	async setScrip(setAmount, isTokens = false) {
+		const currencyType = isTokens ? "tokens" : "capital";
+		this[currencyType] = setAmount
+		await super.changeProperty(currencyType, this[currencyType]);
 	}
 
-	async addScrip(addAmount) {
+	async addScrip(addAmount, isTokens = false) {
 		const add = sanitizeCurrency(addAmount)
-		const currentScrip = this.capital;
-		this.capital = currentScrip + add
-		await super.changeProperty('capital', this.capital)
-		this.lifetimeCapital = this.lifetimeCapital + add
-		await super.changeProperty('lifetimeCapital', this.lifetimeCapital)
+		const currencyType = isTokens ? "tokens" : "capital";
+		const currentScrip = this[currencyType];
+		this[currencyType] = currentScrip + add
+		await super.changeProperty(currencyType, this[currencyType])
+		this[currencyType] = this[currencyType] + add
+		if (!isTokens) {
+			await super.changeProperty('lifetimeCapital', this.lifetimeCapital)
+		}
 	}
 
-	async removeScrip(removeAmount) {
-		const currentScrip = this.capital;
+	async removeScrip(removeAmount, isTokens = false) {
+		const currencyType = isTokens ? "tokens" : "capital";
+		const currentScrip = this[currencyType];
 		const remove = sanitizeCurrency(removeAmount)
 
 		if (removeAmount > currentScrip) {
-			throw new Error("Not enough capital!");
+			throw new Error(`Not enough ${currencyType}!`);
 		}
 
-		this.capital = currentScrip - remove
-		await super.changeProperty('capital', this.capital)
+		this[currencyType] = currentScrip - remove
+		await super.changeProperty(currencyType, this[currencyType])
 	}
 
 	/**
