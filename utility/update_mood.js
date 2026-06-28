@@ -1,5 +1,5 @@
 import { ActivityType } from "discord.js";
-import { pickOne } from "./utils";
+import { pickOne } from "./utils.js";
 
 const CHECK_INTERVAL = 6 * 60 * 60 * 1000; // six hours
 
@@ -10,6 +10,7 @@ function moodCycle(client) {
 }
 
 export function startCycleMood(client) {
+	moodCycle(client);
 	setInterval(() => {
 		moodCycle(client).catch(e => console.error('error in moodCycle:', e));
 	}, CHECK_INTERVAL);
