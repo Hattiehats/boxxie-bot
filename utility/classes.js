@@ -564,6 +564,7 @@ export class Mun extends DBTable {
 		this[currencyType] = currentScrip + add
 		await super.changeProperty(currencyType, this[currencyType])
 		if (!isTokens) {
+			this['lifetimeCapital'] += addAmount;
 			await super.changeProperty('lifetimeCapital', this.lifetimeCapital)
 		}
 		return this[currencyType];
