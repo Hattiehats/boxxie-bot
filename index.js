@@ -32,15 +32,15 @@ commands.forEach(command => {
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 const commandData = commands.map(command => command.data);
 try {
-	if (!process.env.DEV_MODE) {
-		const globalData = await rest.put(Routes.applicationCommands(process.env.APP_ID), { body: commandData });
+	if (!process.env.DEV_MODE || process.env.CLEAR_COMMANDS_PROD) {
+		const globalData = await rest.put(Routes.applicationCommands(process.env.APP_ID), { body: process.env.CLEAR_COMMANDS_PROD ? [] : commandData });
 		console.log(`Registered ${globalData.length} global slash commands.`);
 	}
 
 	if (process.env.DEV_GUILDID) {
 		const guildData = await rest.put(
 			Routes.applicationGuildCommands(process.env.APP_ID, process.env.DEV_GUILDID),
-			{ body: commandData }
+			{ body: process.env.CLEAR_COMMANDS_DEV ? [] : commandData }
 		);
 		console.log(`Registered ${guildData.length} guild slash commands to dev server.`);
 	}

@@ -25,18 +25,21 @@ if (deployGlobal === true) {
 dynamicImport('./commands').then((commands) => {
 	(async () => {
 		try {
+			let clear = false;
 			if (deployGlobal) {
 				console.log("%cDeploying commands globally...", "color: yellow;")
+				clear = process.env.CLEAR_COMMANDS_PROD;
 			}
 			else {
 				console.log("%cDeploying commands to test server...", "color: yellow;")
+				clear = process.env.CLEAR_COMMANDS_DEV;
 			}
 			console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 			// The put method is used to fully refresh all commands globally with the current set
 
 			const data = await rest.put(routes, {
-				body: commands.map(command => (command.data))
+				body: clear ? [] : commands.map(command => (command.data))
 			});
 
 			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
