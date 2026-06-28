@@ -1,19 +1,28 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import { pickOne } from './utils';
 
 export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({
-			name: "New Millennium Technologies",
+			name: "Linne Co. Administration",
 			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
 		})
 		.setColor(process.env.EMBED_COLOUR)
 		.setFooter({
-			text: "The work is important; your body is not.",
+			text: pickOne(potentialFooterTexts),
 			iconURL: "https://img.icons8.com/?size=100&id=lTImOaDFYG9P&format=png&color=000000",
 		});
 
 	return embedBuilder;
 }
+
+const potentialFooterTexts = [
+	"Linne Co. - For the future, together.",
+	"Friendly reminder to wear your IRIS at all times.",
+	"Have you signed up for the company softball team?",
+	"Document classification A-I(S).",
+	"The contents above are to be considered Confidential.",
+]
 
 export function basicEmbed(title = "", description = "", thumbnail = "", image = "", link = "", format = true) {
 	let embedMessage = new EmbedBuilder();
