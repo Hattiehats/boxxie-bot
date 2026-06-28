@@ -360,11 +360,11 @@ export class Character extends DBTable {
 			}
 
 			const currentRecons = parseInt(this.currentStats.recons);
-			await this.currentStats.setStat('reprints', currentRecons + 1)
-			error = Math.random() <= 0.25;
+			await this.currentStats.setStat('recons', currentRecons + 1)
+			error = Math.random() <= 0.1;
 			await this.currentStats.setStat('error', error)
 		} catch (err) {
-			console.log("error in character. reprint")
+			console.log("error in character. recons")
 			console.log(err);
 			// fail quiet
 			error = false

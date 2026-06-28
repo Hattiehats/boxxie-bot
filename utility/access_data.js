@@ -2,7 +2,7 @@ import { JSONFile, JSONFilePreset } from "lowdb/node";
 import { SheetTable } from "./classes.js";
 import { existsSync } from "node:fs";
 import { Low } from "lowdb";
-import { EmbedBuilder } from "discord.js";
+import { generateDaily } from "./dailies.js";
 
 export const SHEET_RANGES = [
 	{
@@ -1118,19 +1118,10 @@ export async function periodicSync(client) {
 		// ── 11. Send daily refresh embed to cubicles channel ──
 		if (client) {
 			try {
-				const CUBICLES_CHANNEL_ID = '1463329881705414743';
+				const CUBICLES_CHANNEL_ID = process.env.CUBICLES_CHANNEL_ID;
 				const channel = await client.channels.fetch(CUBICLES_CHANNEL_ID).catch(() => null);
 				if (channel) {
-					const commands = db.data.prefixCommands || [];
-					const titleCmd = commands.find(cmd => cmd.command?.trim().toLowerCase() === 'daily_title' && cmd.text);
-					const descCmd = commands.find(cmd => cmd.command?.trim().toLowerCase() === 'daily_refresh' && cmd.text);
-
-					const embed = new EmbedBuilder()
-						.setTitle(titleCmd?.text?.trim() || 'Daily Refreshed')
-						.setDescription(descCmd?.text?.trim() || 'The daily reset has occurred!')
-						.setColor(0xacd46e);
-
-					await channel.send({ embeds: [embed] });
+					await channel.send({ embeds: [generateDaily()] });
 					console.log('[Sync] Sent daily refresh embed to cubicles channel.');
 				} else {
 					console.error(`[Sync] Could not find cubicles channel ${CUBICLES_CHANNEL_ID}`);
@@ -1157,6 +1148,9 @@ export function startPeriodicSync(client) {
 	function scheduleNext() {
 		const ms = msUntilMidnightEST();
 		nextSyncAt = Date.now() + ms;
+		if (process.env.TEST_DAILY) {
+			periodicSync(client);
+		}
 		syncTimer = setTimeout(async () => {
 			try {
 				await periodicSync(client);
