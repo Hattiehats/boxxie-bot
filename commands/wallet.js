@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, CommandInteraction, CommandInteractionOptionResolver, User } from 'discord.js';
 import { Mun } from '../utility/classes.js';
-import { basicEmbed } from '../utility/format_embed.js';
+import { basicEmbed, parseEmbedColour } from '../utility/format_embed.js';
 import { getTableData } from '../utility/access_data.js';
 
 const commandBuilder = new SlashCommandBuilder()
@@ -22,7 +22,7 @@ async function viewWallet(interaction, mun) {
 	const title = `${mun.name}'s Wallet`
 	const message = `💰 \`${mun.scrip}\` scrip`
 	const embed = basicEmbed(title, message, '', '', '', false);
-	embed.setColor(process.env.EMBED_COLOUR);
+	embed.setColor(parseEmbedColour());
 
 	await interaction.editReply({ embeds: [embed] });
 }
@@ -67,7 +67,7 @@ export default {
 		}
 		const mun = new Mun(munData.name);
 		const embed = basicEmbed(`${mun.name}'s Wallet`, `💰 \`${mun.scrip}\` scrip`, '', '', '', false);
-		embed.setColor(process.env.EMBED_COLOUR);
+		embed.setColor(parseEmbedColour());
 		await message.reply({ embeds: [embed] });
 	},
 }

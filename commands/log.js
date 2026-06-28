@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Mun } from '../utility/classes.js';
-import { basicEmbed } from '../utility/format_embed.js';
+import { basicEmbed, parseEmbedColour } from '../utility/format_embed.js';
 
 // Maps shorthand command names → mechanics table "type" values
 const TYPE_ALIASES = {
@@ -167,7 +167,7 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 	const message =
 		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} scrip to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
-	embed.setColor(process.env.EMBED_COLOUR);
+	embed.setColor(parseEmbedColour());
 	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.scrip} scrip` });
 
 	await replyTarget.reply({ embeds: [embed] });

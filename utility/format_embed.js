@@ -1,13 +1,18 @@
 import { EmbedBuilder } from 'discord.js';
 import { pickOne } from './utils.js';
 
+export function parseEmbedColour(colour) {
+	const colourString = colour ?? process.env.EMBED_COLOUR;
+	return colourString ? parseInt(colourString) : 0x00ff00;
+}
+
 export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({
 			name: "Linne Co. Administration",
 			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
 		})
-		.setColor(process.env.EMBED_COLOUR)
+		.setColor(parseEmbedColour())
 		.setFooter({
 			text: pickOne(potentialFooterTexts),
 			iconURL: "https://img.icons8.com/?size=100&id=lTImOaDFYG9P&format=png&color=000000",

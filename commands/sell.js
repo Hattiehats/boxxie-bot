@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import { Item, Mun } from "../utility/classes.js";
 import { fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed } from "../utility/format_embed.js";
+import { basicEmbed, parseEmbedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("sell")
@@ -240,7 +240,7 @@ export default {
 			'',
 			item.image || '', '', '', false
 		);
-		embed.setColor(process.env.EMBED_COLOUR);
+		embed.setColor(parseEmbedColour());
 		embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
 		await message.reply({ embeds: [embed] });
 	},

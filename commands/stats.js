@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Character } from '../utility/classes.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
+import { parseEmbedColour } from '../utility/format_embed.js';
 
 function viewStats(OC) {
 	const embedMessage = new EmbedBuilder()
@@ -10,7 +11,7 @@ function viewStats(OC) {
 			name: "New Millennium Technologies",
 			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
 		})
-		.setColor(process.env.EMBED_COLOUR)
+		.setColor(parseEmbedColour())
 		.setFields(
 			{
 				name: "",

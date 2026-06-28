@@ -18,7 +18,7 @@ import {
 	Mun,
 } from "../utility/classes.js";
 import { getBuyConfirmContainer, fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed } from "../utility/format_embed.js";
+import { basicEmbed, parseEmbedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("buy")
@@ -181,7 +181,7 @@ export default {
 				'',
 				item.image || '', '', '', false
 			);
-			embed.setColor(process.env.EMBED_COLOUR);
+			embed.setColor(parseEmbedColour());
 			embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
 			await message.reply({ embeds: [embed] });
 		} catch (error) {
