@@ -113,8 +113,8 @@ function createProfileEmbed(OC) {
 				inline: false
 			},
 			{
-				name: "`REPRINTS:`",
-				value: `${OC.currentStats.reprints}`,
+				name: "`RECONS:`",
+				value: `${OC.currentStats.recons}`,
 				inline: true
 			},
 			{

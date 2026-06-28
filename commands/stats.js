@@ -65,7 +65,7 @@ function viewStats(OC) {
 			},
 			{
 				name: "",
-				value: `**\`\`\`\n🖨️ REPRINTS: ${OC.currentStats.reprints}\n\`\`\`**`,
+				value: `**\`\`\`\n🖨️ RECONS: ${OC.currentStats.recons}\n\`\`\`**`,
 				inline: false
 			},
 		)
