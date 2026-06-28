@@ -10,7 +10,7 @@ function viewStats(OC) {
 			name: "New Millennium Technologies",
 			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
 		})
-		.setColor("#process.env.EMBED_COLOUR")
+		.setColor(process.env.EMBED_COLOUR)
 		.setFields(
 			{
 				name: "",

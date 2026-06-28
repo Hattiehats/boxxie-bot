@@ -48,7 +48,7 @@ async function changeWallet(interaction, amount, mun, currency) {
 		`**\`\`\`Added ${amount} ${currency} to ${mun.name}'s wallet.\`\`\`**`;
 
 	const embed = basicEmbed('Manage Wallet', actionMessage, thumbnail, '', '', false)
-	embed.setColor("#process.env.EMBED_COLOUR");
+	embed.setColor(process.env.EMBED_COLOUR);
 	embed.setFooter({ text: `💰 NEW BALANCE: ${mun[currency]} ${currency}` });
 
 	await interaction.reply({ embeds: [embed] });
@@ -98,7 +98,7 @@ export default {
 		await mun.addTeamPoints(amount);
 		const actionMessage = `**\`\`\`Added ${amount} scrip to ${mun.name}'s wallet.\`\`\`**`;
 		const embed = basicEmbed('Manage Wallet', actionMessage, 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg', '', '', false);
-		embed.setColor("#process.env.EMBED_COLOUR");
+		embed.setColor(process.env.EMBED_COLOUR);
 		embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
 		await message.reply({ embeds: [embed] });
 	},

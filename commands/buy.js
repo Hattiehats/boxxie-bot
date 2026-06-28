@@ -181,7 +181,7 @@ export default {
 				'',
 				item.image || '', '', '', false
 			);
-			embed.setColor("#process.env.EMBED_COLOUR");
+			embed.setColor(process.env.EMBED_COLOUR);
 			embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
 			await message.reply({ embeds: [embed] });
 		} catch (error) {

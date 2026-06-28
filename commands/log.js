@@ -167,7 +167,7 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 	const message =
 		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} scrip to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
-	embed.setColor("#process.env.EMBED_COLOUR");
+	embed.setColor(process.env.EMBED_COLOUR);
 	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.scrip} scrip` });
 
 	await replyTarget.reply({ embeds: [embed] });

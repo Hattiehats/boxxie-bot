@@ -6,7 +6,7 @@ export function addStandardFormat(embedBuilder) {
 			name: "New Millennium Technologies",
 			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
 		})
-		.setColor("#process.env.EMBED_COLOUR")
+		.setColor(process.env.EMBED_COLOUR)
 		.setFooter({
 			text: "The work is important; your body is not.",
 			iconURL: "https://img.icons8.com/?size=100&id=lTImOaDFYG9P&format=png&color=000000",
