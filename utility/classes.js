@@ -338,7 +338,7 @@ export class Character extends DBTable {
 		this.gender = this.data.gender;
 		this.pronouns = this.data.pronouns;
 		this.birthday = this.data.birthday;
-		this.bloodType = this.data.bloodType;
+		this.consultant = this.data.consultant;
 		this.image = this.data.image;
 		this.height = this.data.height;
 		this.baseStats = new baseStats(this.name);
@@ -351,7 +351,7 @@ export class Character extends DBTable {
 
 	async reprint() {
 		//Resets stats
-		const stats = ['wit', 'cha', 'str', 'mve', 'dur', 'lck'];
+		const stats = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mle', 'rgd', 'luk'];
 		let error = false;
 		try {
 			for (const stat of stats) {
@@ -377,12 +377,16 @@ export class baseStats extends DBTable {
 	constructor(ocName) {
 		super('baseStats', 'name', ocName)
 		this.name = this.data.name;
-		this.wit = this.data.wit;
-		this.cha = this.data.cha;
 		this.str = this.data.str;
-		this.mve = this.data.mve;
+		this.dex = this.data.dex;
+		this.int = this.data.int;
+		this.cha = this.data.cha;
 		this.dur = this.data.dur;
+		this.res = this.data.res;
+		this.mle = this.data.mle;
+		this.rgd = this.data.rgd;
 		this.lck = this.data.lck;
+		this.special = this.data.special;
 	}
 }
 
@@ -390,12 +394,16 @@ export class currentStats extends DBTable {
 	constructor(ocName) {
 		super('currentStats', 'name', ocName)
 		this.name = this.data.name;
-		this.wit = this.data.wit;
-		this.cha = this.data.cha;
 		this.str = this.data.str;
-		this.mve = this.data.mve;
+		this.dex = this.data.dex;
+		this.int = this.data.int;
+		this.cha = this.data.cha;
 		this.dur = this.data.dur;
+		this.res = this.data.res;
+		this.mle = this.data.mle;
+		this.rgd = this.data.rgd;
 		this.lck = this.data.lck;
+		this.special = this.data.special;
 		this.reprints = this.data.reprints;
 		this.error = this.data.error;
 		this.daily = this.data.daily;

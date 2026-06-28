@@ -5,7 +5,7 @@ import { Character } from '../utility/classes.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
 
 // All changeable fields: profile info + stats
-const STAT_FIELDS = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'rgd', 'lck'];
+const STAT_FIELDS = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mve', 'rgd', 'lck'];
 const PROFILE_FIELDS = ['aka', 'age', 'gender', 'pronouns', 'height', 'birthday', 'consultant', 'image', 'special'];
 const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
 
@@ -85,6 +85,11 @@ function createProfileEmbed(OC) {
 			{
 				name: "`RES:`",
 				value: `${OC.currentStats.res}`,
+				inline: true
+			},
+			{
+				name: "`MLE:`",
+				value: `${OC.currentStats.mle}`,
 				inline: true
 			},
 			{
