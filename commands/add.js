@@ -5,7 +5,7 @@ import { getTableData } from '../utility/access_data.js';
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName('add')
-	.setDescription('Add scrip to your wallet')
+	.setDescription('Add a currency to your wallet')
 	.addIntegerOption((option) =>
 		option
 			.setName('amount')
@@ -21,6 +21,7 @@ const commandBuilder = new SlashCommandBuilder()
 	.addStringOption((option) =>
 		option
 			.setName('currency')
+			.setDescription('The kind of currency to add')
 			.addChoices(
 				{ name: "Capital", value: "capital" },
 				{ name: "Tokens", value: "tokens" },
