@@ -351,7 +351,7 @@ export class Character extends DBTable {
 
 	async reprint() {
 		//Resets stats
-		const stats = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mle', 'rgd', 'luk'];
+		const stats = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mle', 'rgd', 'lck'];
 		let error = false;
 		try {
 			for (const stat of stats) {
@@ -359,8 +359,8 @@ export class Character extends DBTable {
 				await this.currentStats.setStat(stat, baseStat)
 			}
 
-			const currentReprints = parseInt(this.currentStats.reprints);
-			await this.currentStats.setStat('reprints', currentReprints + 1)
+			const currentRecons = parseInt(this.currentStats.recons);
+			await this.currentStats.setStat('reprints', currentRecons + 1)
 			error = Math.random() <= 0.25;
 			await this.currentStats.setStat('error', error)
 		} catch (err) {
@@ -404,7 +404,7 @@ export class currentStats extends DBTable {
 		this.rgd = this.data.rgd;
 		this.lck = this.data.lck;
 		this.special = this.data.special;
-		this.reprints = this.data.reprints;
+		this.recons = this.data.recons;
 		this.error = this.data.error;
 		this.daily = this.data.daily;
 		this.dailyConsequence = this.data.dailyConsequence;

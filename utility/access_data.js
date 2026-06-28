@@ -284,12 +284,12 @@ const currentStatKeys = [
 		sheet: "SPECIAL",
 	},
 	{
-		db: "reprints",
-		sheet: "Reprints"
+		db: "recons",
+		sheet: "Recons"
 	},
 	{
 		db: "error",
-		sheet: "Reprint Error"
+		sheet: "Recon Error"
 	},
 	{
 		db: "daily",
