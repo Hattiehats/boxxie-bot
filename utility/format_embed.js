@@ -22,9 +22,11 @@ export function addStandardFormat(embedBuilder) {
 }
 
 const potentialFooterTexts = [
-	"Linne Co. - For the future, together.",
+	"Non haberi sed esse",
+	"For the future, together.",
 	"Friendly reminder to wear your IRIS at all times.",
 	"Have you signed up for the company softball team?",
+	"DISREGARD ABOVE DOCUMENT.",
 	"Document classification A-I(S).",
 	"The contents above are to be considered Confidential.",
 ]
