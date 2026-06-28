@@ -3,7 +3,7 @@ import { pickOne } from './utils.js';
 
 export function parseEmbedColour(colour) {
 	const colourString = colour ?? process.env.EMBED_COLOUR;
-	return colourString ? parseInt(colourString) : 0x00ff00;
+	return colourString ? parseInt(colourString, 16) : 0x00ff00;
 }
 
 export function addStandardFormat(embedBuilder) {
