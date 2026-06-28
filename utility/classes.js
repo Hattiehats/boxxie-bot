@@ -567,6 +567,7 @@ export class Mun extends DBTable {
 		if (!isTokens) {
 			await super.changeProperty('lifetimeCapital', this.lifetimeCapital)
 		}
+		return this[currencyType];
 	}
 
 	async removeScrip(removeAmount, isTokens = false) {
