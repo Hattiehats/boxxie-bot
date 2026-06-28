@@ -6,6 +6,13 @@ export const ADMIN_ROLE_IDS = [
 	'1469430982296731850',
 ];
 
+export const randomActivities = [
+	"Waiting for the subway...",
+	"Auditing IRIS logs...",
+	"Deleting unnecessary security footage...",
+	"Reviewing singularity reports...",
+];
+
 /**
  * Pick a random entry from an array.
  * @param {array} targetArray
