@@ -9,7 +9,7 @@ function viewStats(OC) {
 		.setTitle(OC.name)
 		.setAuthor({
 			name: "LINNE CO EMPLOYEE MEDICAL REPORT",
-			iconURL: "https://thumbs2.imgbox.com/6c/bc/2MkLHEGP_t.png",
+			iconURL: "https://images2.imgbox.com/f6/3e/JyiFMyzL_o.png",
 		})
 		.setColor(parseEmbedColour())
 		.setFields(

@@ -10,7 +10,7 @@ export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({
 			name: "Linne Co. Administration",
-			iconURL: "https://thumbs2.imgbox.com/6c/bc/2MkLHEGP_t.png",
+			iconURL: "https://images2.imgbox.com/f6/3e/JyiFMyzL_o.png",
 		})
 		.setColor(parseEmbedColour())
 		.setFooter({
