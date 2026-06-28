@@ -169,6 +169,7 @@ async function changeField(interaction, OC, fieldName, newValue) {
 	}
 	else {
 		const origValue = OC[field] || '*(empty)*';
+		console.log(`Original: ${origValue}, field: ${field}`);
 		await OC.changeProperty(field, newValue);
 		OC[field] = newValue;
 
@@ -212,15 +213,15 @@ const changeSubcommand =
 					{ name: 'Pronouns', value: 'pronouns' },
 					{ name: 'Height', value: 'height' },
 					{ name: 'Birthday', value: 'birthday' },
-					{ name: 'Consultancy', value: 'consult' },
+					{ name: 'Consultancy', value: 'consultant' },
 					{ name: 'Image', value: 'image' },
-					{ name: 'STR', value: 'wit' },
-					{ name: 'DEX', value: 'cha' },
-					{ name: 'INT', value: 'cha' },
-					{ name: 'CHA', value: 'str' },
-					{ name: 'DUR', value: 'mve' },
-					{ name: 'RES', value: 'mve' },
-					{ name: 'RGD', value: 'dur' },
+					{ name: 'STR', value: 'str' },
+					{ name: 'DEX', value: 'dex' },
+					{ name: 'INT', value: 'int' },
+					{ name: 'CHA', value: 'cha' },
+					{ name: 'DUR', value: 'dur' },
+					{ name: 'RES', value: 'res' },
+					{ name: 'RGD', value: 'rgd' },
 					{ name: 'LCK', value: 'lck' },
 					{ name: 'Specialty', value: 'special' },
 				)
