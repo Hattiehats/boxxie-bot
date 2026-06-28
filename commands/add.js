@@ -24,7 +24,7 @@ const commandBuilder = new SlashCommandBuilder()
 			.setDescription('The kind of currency to add')
 			.addChoices(
 				{ name: "Capital", value: "capital" },
-				{ name: "Tokens", value: "tokens" },
+				{ name: "LLT", value: "tokens" },
 			)
 	)
 

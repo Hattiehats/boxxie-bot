@@ -20,7 +20,7 @@ const commandBuilder = new SlashCommandBuilder()
  */
 async function viewWallet(interaction, mun) {
 	const title = `${mun.name}'s Wallet`
-	const message = `💰 \`${mun.capital}\` Capital and ${mun.tokens} Tokens`
+	const message = `💰 \`${mun.capital}\` Capital and ${mun.tokens} Linne Loyalty Tokens`
 	const embed = basicEmbed(title, message, '', '', '', false);
 	embed.setColor(parseEmbedColour());
 
