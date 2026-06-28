@@ -72,6 +72,8 @@ async function mainFunction(interaction) {
 
 	let userOption = interaction.options.getUser('user');
 
+	let currencyOption = interaction.options.getString('currency') ?? 'capital';
+
 	if (userOption === null) {
 		userOption = interaction.user
 	}
@@ -80,7 +82,7 @@ async function mainFunction(interaction) {
 	const munName = allMuns.find(row => row.id === userOption.id).name
 	const mun = new Mun(munName);
 
-	await changeWallet(interaction, amount, mun);
+	await changeWallet(interaction, amount, mun, currencyOption);
 
 }
 
