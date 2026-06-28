@@ -6,7 +6,7 @@ import { fuzzyMatchOCNames } from '../utility/utils.js';
 
 // All changeable fields: profile info + stats
 const STAT_FIELDS = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mve', 'rgd', 'lck'];
-const PROFILE_FIELDS = ['aka', 'age', 'gender', 'pronouns', 'height', 'birthday', 'consultant', 'image', 'special'];
+const PROFILE_FIELDS = ['aka', 'age', 'gender', 'pronouns', 'height', 'birthday', 'image'];
 const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
 
 /**
@@ -153,15 +153,15 @@ async function changeField(interaction, OC, fieldName, newValue) {
 		let description = `**${field.toUpperCase()}:** \`${origValue}\` ➡️ \`${OC.currentStats[field]}\`\n\n`;
 		if (numValue > parseInt(origValue)) {
 			title = "-# \`STAT UP ⏫\`"
-			description = description + title + ` *yippee!* <a:mamegoma:1467091008704483500>`
+			description = description + title;
 		}
 		else if (numValue < parseInt(origValue)) {
 			title = "-# \`STAT DOWN ⏬\`"
-			description = description + title + ` *tough break...* <a:Rilakkuma:1467091591478116445>`
+			description = description + title;
 		}
 		else {
-			title = "-# \`STAT 🆗\`"
-			description = description + title + ` *unchanged...*`
+			title = "-# \`STAT UNCHANGED 🆗\`"
+			description = description + title;
 		}
 
 		const embedMessage = basicEmbed(OC.name, description, OC.image);
@@ -169,7 +169,6 @@ async function changeField(interaction, OC, fieldName, newValue) {
 	}
 	else {
 		const origValue = OC[field] || '*(empty)*';
-		console.log(`Original: ${origValue}, field: ${field}`);
 		await OC.changeProperty(field, newValue);
 		OC[field] = newValue;
 
@@ -213,7 +212,6 @@ const changeSubcommand =
 					{ name: 'Pronouns', value: 'pronouns' },
 					{ name: 'Height', value: 'height' },
 					{ name: 'Birthday', value: 'birthday' },
-					{ name: 'Consultancy', value: 'consultant' },
 					{ name: 'Image', value: 'image' },
 					{ name: 'STR', value: 'str' },
 					{ name: 'DEX', value: 'dex' },
@@ -223,7 +221,6 @@ const changeSubcommand =
 					{ name: 'RES', value: 'res' },
 					{ name: 'RGD', value: 'rgd' },
 					{ name: 'LCK', value: 'lck' },
-					{ name: 'Specialty', value: 'special' },
 				)
 				.setRequired(true)
 		)
