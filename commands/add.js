@@ -43,7 +43,9 @@ async function changeWallet(interaction, amount, mun, currency) {
 	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
 
 	await mun.addScrip(amount, currency === "tokens")
-	await mun.addTeamPoints(amount)
+	if (currency === "tokens") {
+		await mun.addTeamPoints(amount)
+	}
 	actionMessage =
 		`**\`\`\`Added ${amount} ${currency} to ${mun.name}'s wallet.\`\`\`**`;
 
