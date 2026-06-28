@@ -24,11 +24,12 @@ const TYPE_ALIASES = {
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName('submit')
-	.setDescription('Submit art, writing, or other work for scrip!')
+	.setDescription('Submit art, writing, or other work for Capital or LLT')
 	.addStringOption(option =>
 		option.setName('submission')
 			.setDescription('e.g. "fullrendered 3 bg, words 1000, commission 2"')
 			.setRequired(true)
+			.setAutocomplete(true)
 	)
 	.addUserOption(option =>
 		option.setName('user')
@@ -180,32 +181,9 @@ export default {
 		const targetUser = interaction.options.getUser('user') || interaction.user;
 		await mainFunction(interaction, submissionStr, targetUser);
 	},
-	async executePrefix(message, args) {
-		if (!args || !args.trim()) {
-			await message.reply(
-				'Usage: `?submit <submission>` — e.g. `?submit fullrendered 3 bg, words 1000`\n\n' +
-				'**Art:** headsketch, headrefined, headrendered, halfsketch, halfrefined, halfrendered, fullsketch, fullrefined, fullrendered\n' +
-				'**Other:** words, commission, prop\n' +
-				'**Multipliers:** bg, npc (add after art type)'
-			);
-			return;
-		}
-
-		// Extract mentioned user
-		const mentionMatch = args.match(/<@!?(\d+)>/);
-		let targetUser;
-		if (mentionMatch) {
-			targetUser = await message.client.users.fetch(mentionMatch[1]);
-			args = args.replace(/<@!?\d+>/g, '').trim();
-		} else {
-			targetUser = message.author;
-		}
-
-		// Backward compatibility: bare number → treat as word count
-		if (!isNaN(args.trim())) {
-			args = `words ${args.trim()}`;
-		}
-
-		await mainFunction(message, args, targetUser);
-	},
+	async autocomplete(interaction) {
+		const focusValue = interaction.options.getFocused();
+		const filter = fuzzyMatchOnTable(focusValue, 25, 'mechanics', 'Submission Type')
+		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
+	}
 }

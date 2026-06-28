@@ -97,6 +97,33 @@ export function resolveOCName(input) {
 	return null;
 }
 
+// As below, but fuzzier, and can support multiple tables
+export function fuzzyMatchOnTable(query, limit = 25, table, field) {
+	const allmatches = getTableData(table.toLowerCase());
+	if (!allmatches || !Array.isArray(allmatches)) return [];
+	if (!query) return allmatches.slice(0, limit).map(match => match[field]);
+
+	const lower = query.toLowerCase();
+	const matched = new Set();
+	const prefixResults = [];
+	const containsResults = [];
+
+	for (const match of allmatches) {
+		const name = match[field]?.toLowerCase() || '';
+
+		const namePrefix = name.startsWith(lower);
+		const nameContains = !namePrefix && name.includes(lower);
+
+		if (namePrefix) {
+			if (!matched.has(match[field])) { matched.add(match[field]); prefixResults.push(match[field]); }
+		} else if (nameContains) {
+			if (!matched.has(match[field])) { matched.add(match[field]); containsResults.push(match[field]); }
+		}
+	}
+
+	return [...prefixResults, ...containsResults].slice(0, limit);
+}
+
 /**
  * Return OC names that match a query by name or alias (for autocomplete).
  * Prefix matches first, then contains matches.
