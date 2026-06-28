@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import { pickOne } from './utils';
+import { pickOne } from './utils.js';
 
 export function addStandardFormat(embedBuilder) {
 	embedBuilder
