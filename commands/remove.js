@@ -5,7 +5,7 @@ import { getTableData } from '../utility/access_data.js';
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName('remove')
-	.setDescription('Remove scrip from your wallet.')
+	.setDescription('Remove currency from your wallet.')
 	.addIntegerOption((option) =>
 		option
 			.setName('amount')
@@ -41,9 +41,9 @@ async function changeWallet(interaction, amount, mun, currency) {
 
 	let actionMessage;
 	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
-
+	let result;
 	try {
-		const result = await mun.removeScrip(amount, currency === "tokens")
+		result = await mun.removeScrip(amount, currency === "tokens")
 		actionMessage =
 			`**\`\`\`Removed ${amount} ${currency} from ${mun.name}'s wallet.\`\`\`**`;
 	}
