@@ -46,7 +46,8 @@ function generateWeatherText(season) {
 }
 
 const divider = {
-	name: "━━━━━━━━━━━━━━"
+	name: "━━━━━━━━━━━━━━",
+	value: ""
 }
 
 function generateDailyWeatherComponent() {
