@@ -91,34 +91,4 @@ export default {
 		await mainFunction(interaction);
 
 	},
-	async executePrefix(message, args) {
-		const amount = parseInt(args);
-		if (isNaN(amount) || amount < 0) {
-			await message.reply('Please provide a valid amount! Usage: `!remove <amount> [@user]`');
-			return;
-		}
-		const user = message.mentions.users.first() || message.author;
-		const allMuns = await getTableData('muns');
-		const munData = allMuns.find(row => row.id === user.id);
-		if (!munData) {
-			await message.reply("Couldn't find that user's profile!");
-			return;
-		}
-		const mun = new Mun(munData.name);
-		let actionMessage;
-		try {
-			await mun.removeScrip(amount);
-			actionMessage = `**\`\`\`Removed ${amount} scrip from ${mun.name}'s wallet.\`\`\`**`;
-		} catch (error) {
-			if (error.message === 'Not enough scrip!') {
-				actionMessage = `**\`\`\`ERROR: Not enough scrip in ${mun.name}'s wallet, cannot remove ${amount} scrip!\`\`\`**\n💰 **BALANCE:** \`${mun.scrip}\` scrip`;
-			} else {
-				throw error;
-			}
-		}
-		const embed = basicEmbed('Manage Wallet', actionMessage, 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg', '', '', false);
-		embed.setColor(parseEmbedColour());
-		embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
-		await message.reply({ embeds: [embed] });
-	},
 }
