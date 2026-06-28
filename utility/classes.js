@@ -581,6 +581,7 @@ export class Mun extends DBTable {
 
 		this[currencyType] = currentScrip - remove
 		await super.changeProperty(currencyType, this[currencyType])
+		return this[currencyType];
 	}
 
 	/**

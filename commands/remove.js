@@ -18,6 +18,15 @@ const commandBuilder = new SlashCommandBuilder()
 			.setName('user')
 			.setDescription('The user whose wallet you want to remove from. Defaults to you.')
 	)
+	.addStringOption((option) =>
+		option
+			.setName('currency')
+			.setDescription('The kind of currency to remove')
+			.addChoices(
+				{ name: "Capital", value: "capital" },
+				{ name: "LLT", value: "tokens" },
+			)
+	)
 
 
 /**
@@ -28,21 +37,21 @@ const commandBuilder = new SlashCommandBuilder()
  * @param {number} amount - amount to change by
  * @param {Mun} mun - Mun to affect
  */
-async function changeWallet(interaction, amount, mun) {
+async function changeWallet(interaction, amount, mun, currency) {
 
 	let actionMessage;
 	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
 
 	try {
-		await mun.removeScrip(amount)
+		const result = await mun.removeScrip(amount, currency === "tokens")
 		actionMessage =
-			`**\`\`\`Removed ${amount} scrip from ${mun.name}'s wallet.\`\`\`**`;
+			`**\`\`\`Removed ${amount} ${currency} from ${mun.name}'s wallet.\`\`\`**`;
 	}
 	catch (error) {
-		if (error.message === "Not enough scrip!") {
+		if (error.message === `Not enough ${currency}!`) {
 			actionMessage =
-				`**\`\`\`ERROR: Not enough scrip in ${mun.name}'s wallet, cannot remove ${amount} scrip!\`\`\`**
-            💰 **BALANCE:** \`${mun.scrip}\` scrip`;
+				`**\`\`\`ERROR: Not enough ${currency} ip in ${mun.name}'s wallet, cannot remove ${amount}!\`\`\`**
+            💰 **BALANCE:** \`${mun[currency]}\` ${currency}`;
 		}
 		else {
 			throw error;
@@ -52,7 +61,7 @@ async function changeWallet(interaction, amount, mun) {
 
 	const embed = basicEmbed('Manage Wallet', actionMessage, thumbnail, '', '', false)
 	embed.setColor(parseEmbedColour());
-	embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
+	embed.setFooter({ text: `💰 NEW BALANCE: ${result} ${currency}` });
 
 	await interaction.reply({ embeds: [embed] });
 }

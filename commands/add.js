@@ -42,7 +42,7 @@ async function changeWallet(interaction, amount, mun, currency) {
 	let actionMessage;
 	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
 
-	await mun.addScrip(amount, currency === "tokens")
+	const result = await mun.addScrip(amount, currency === "tokens")
 	if (currency === "tokens") {
 		await mun.addTeamPoints(amount)
 	}
@@ -51,7 +51,7 @@ async function changeWallet(interaction, amount, mun, currency) {
 
 	const embed = basicEmbed('Manage Wallet', actionMessage, thumbnail, '', '', false)
 	embed.setColor(parseEmbedColour());
-	embed.setFooter({ text: `💰 NEW BALANCE: ${mun[currency]} ${currency}` });
+	embed.setFooter({ text: `💰 NEW BALANCE: ${result} ${currency}` });
 
 	await interaction.reply({ embeds: [embed] });
 }
