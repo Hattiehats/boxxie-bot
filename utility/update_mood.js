@@ -6,7 +6,7 @@ const CHECK_INTERVAL = 6 * 60 * 60 * 1000; // six hours
 function moodCycle(client) {
 	const mood = pickOne(randomActivities);
 	client.user.setActivity(mood.trim(), { type: ActivityType.Custom });
-	console.log(`Bot status set: ${mood.text.trim()}`);
+	console.log(`Bot status set: ${mood.trim()}`);
 }
 
 export function startCycleMood(client) {
