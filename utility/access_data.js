@@ -230,7 +230,7 @@ const baseStatKeys = [
 		sheet: "RGD",
 	},
 	{
-		db: "luk",
+		db: "lck",
 		sheet: "LUK",
 	},
 	{
@@ -276,7 +276,7 @@ const currentStatKeys = [
 		sheet: "RGD",
 	},
 	{
-		db: "luk",
+		db: "lck",
 		sheet: "LUK",
 	},
 	{
