@@ -45,6 +45,10 @@ function generateWeatherText(season) {
 	return pickOne(answer);
 }
 
+const divider = {
+	name: "━━━━━━━━━━━━━━"
+}
+
 function generateDailyWeatherComponent() {
 	const date = new Date();
 	const season = getSeason(date.getMonth());
@@ -52,8 +56,8 @@ function generateDailyWeatherComponent() {
 	const weatherStruct = generateWeatherText(season);
 
 	return {
-		name: "## Weather Report",
-		value: `### ${weatherStruct.HEADER} \n _${weatherStruct.text}_`
+		name: "**━Weather Report━**",
+		value: `**[${weatherStruct.header}]** \n _${weatherStruct.text}_`
 	};
 }
 
@@ -72,6 +76,7 @@ export function generateDaily() {
 	const embed = new EmbedBuilder()
 		.setTitle("Good Morning, Proxies!")
 		.setDescription("_It's a beautiful day to work at Linn Co!_")
+		.addFields(divider)
 		.addFields(generateDailyWeatherComponent())
 
 
