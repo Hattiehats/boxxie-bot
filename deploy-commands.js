@@ -4,7 +4,7 @@ import { dynamicImport } from './dynamic-import.js';
 import { DEV_MODE } from './initialize-data.js';
 
 // SET THIS TO TRUE FOR GLOBAL COMMAND DEPLOYMENT
-const deployGlobal = !DEV_MODE;
+const deployGlobal = !DEV_MODE && !process.env.DEV_MODE;
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.DISCORD_TOKEN);
@@ -15,34 +15,35 @@ const devRoutes = Routes.applicationGuildCommands(process.env.APP_ID, process.en
 const globalRoutes = Routes.applicationCommands(process.env.APP_ID)
 //
 let routes;
-if(deployGlobal === true){
-    routes = globalRoutes 
+if (deployGlobal === true) {
+	routes = globalRoutes
 } else {
-    routes = devRoutes
+	routes = devRoutes
 }
 
 // and deploy your commands!
-dynamicImport('./commands').then((commands)=>{
-    (async () => {
-        try {
-            if(deployGlobal){
-                console.log("%cDeploying commands globally...", "color: yellow;")
-            }
-            else{
-                console.log("%cDeploying commands to test server...", "color: yellow;")
-            }
-            console.log(`Started refreshing ${commands.length} application (/) commands.`);
+dynamicImport('./commands').then((commands) => {
+	(async () => {
+		try {
+			if (deployGlobal) {
+				console.log("%cDeploying commands globally...", "color: yellow;")
+			}
+			else {
+				console.log("%cDeploying commands to test server...", "color: yellow;")
+			}
+			console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
-            // The put method is used to fully refresh all commands globally with the current set
+			// The put method is used to fully refresh all commands globally with the current set
 
-            const data = await rest.put(routes, { 
-                body: commands.map(command => (command.data)) });
+			const data = await rest.put(routes, {
+				body: commands.map(command => (command.data))
+			});
 
-            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-        } catch (error) {
-            // And of course, make sure you catch and log any errors!
-            console.error(error);
-        }
-        })();
+			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+		} catch (error) {
+			// And of course, make sure you catch and log any errors!
+			console.error(error);
+		}
+	})();
 })
 
