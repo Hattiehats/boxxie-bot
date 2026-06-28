@@ -10,7 +10,7 @@ export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({
 			name: "Linne Co. Administration",
-			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
+			iconURL: "https://thumbs2.imgbox.com/6c/bc/2MkLHEGP_t.png",
 		})
 		.setColor(parseEmbedColour())
 		.setFooter({
@@ -21,7 +21,7 @@ export function addStandardFormat(embedBuilder) {
 	return embedBuilder;
 }
 
-const potentialFooterTexts = [
+export const potentialFooterTexts = [
 	"Non haberi sed esse",
 	"For the future, together.",
 	"Friendly reminder to wear your IRIS at all times.",

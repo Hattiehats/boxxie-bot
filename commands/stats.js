@@ -1,15 +1,15 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Character } from '../utility/classes.js';
-import { fuzzyMatchOCNames } from '../utility/utils.js';
-import { parseEmbedColour } from '../utility/format_embed.js';
+import { fuzzyMatchOCNames, pickOne } from '../utility/utils.js';
+import { parseEmbedColour, potentialFooterTexts } from '../utility/format_embed.js';
 
 function viewStats(OC) {
 	const embedMessage = new EmbedBuilder()
 		.setTitle(OC.name)
 		.setAuthor({
-			name: "New Millennium Technologies",
-			iconURL: "https://images2.imgbox.com/4e/ec/hLgncloX_o.png",
+			name: "LINNE CO EMPLOYEE MEDICAL REPORT",
+			iconURL: "https://thumbs2.imgbox.com/6c/bc/2MkLHEGP_t.png",
 		})
 		.setColor(parseEmbedColour())
 		.setFields(
@@ -19,23 +19,23 @@ function viewStats(OC) {
 				inline: false
 			},
 			{
-				name: "`WIT:`",
-				value: `${OC.currentStats.wit}`,
-				inline: true
-			},
-			{
-				name: "`CHR:`",
-				value: `${OC.currentStats.cha}`,
-				inline: true
-			},
-			{
 				name: "`STR:`",
 				value: `${OC.currentStats.str}`,
 				inline: true
 			},
 			{
-				name: "`MVE:`",
-				value: `${OC.currentStats.mve}`,
+				name: "`DEX:`",
+				value: `${OC.currentStats.dex}`,
+				inline: true
+			},
+			{
+				name: "`INT:`",
+				value: `${OC.currentStats.int}`,
+				inline: true
+			},
+			{
+				name: "`CHA:`",
+				value: `${OC.currentStats.cha}`,
 				inline: true
 			},
 			{
@@ -44,16 +44,32 @@ function viewStats(OC) {
 				inline: true
 			},
 			{
+				name: "`RES:`",
+				value: `${OC.currentStats.res}`,
+				inline: true
+			},
+			{
+				name: "`RGD:`",
+				value: `${OC.currentStats.rgd}`,
+				inline: true
+			},
+			{
 				name: "`LCK:`",
 				value: `${OC.currentStats.lck}`,
 				inline: true
+			},
+			{
+				name: "`SPECIAL:`",
+				value: `${OC.currentStats.special}`,
+				inline: false
 			},
 			{
 				name: "",
 				value: `**\`\`\`\n🖨️ REPRINTS: ${OC.currentStats.reprints}\n\`\`\`**`,
 				inline: false
 			},
-		);
+		)
+		.setFooter({ text: pickOne(potentialFooterTexts) });
 
 	return embedMessage;
 }

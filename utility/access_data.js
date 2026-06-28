@@ -15,7 +15,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "Base Stats",
-		range: "A:G"
+		range: "A:K"
 	},
 	{
 		sheet: "All Items",
@@ -23,7 +23,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "Current Stats",
-		range: "A:K"
+		range: "A:O"
 	},
 	{
 		sheet: "Inventory Rows",
@@ -184,8 +184,8 @@ const ocKeys = [
 		sheet: "Birthday"
 	},
 	{
-		db: "bloodType",
-		sheet: "Blood Type"
+		db: "consultant",
+		sheet: "Consultant"
 	},
 	{
 		db: "image",
@@ -198,28 +198,44 @@ const baseStatKeys = [
 		sheet: "Name"
 	},
 	{
-		db: "wit",
-		sheet: "WIT"
+		db: "str",
+		sheet: "STR"
+	},
+	{
+		db: "dex",
+		sheet: "DEX"
+	},
+	{
+		db: "int",
+		sheet: "INT"
 	},
 	{
 		db: "cha",
 		sheet: "CHA"
 	},
 	{
-		db: "str",
-		sheet: "STR"
-	},
-	{
-		db: "mve",
-		sheet: "MVE"
-	},
-	{
 		db: "dur",
 		sheet: "DUR"
 	},
 	{
-		db: "lck",
-		sheet: "LCK"
+		db: "res",
+		sheet: "RES"
+	},
+	{
+		db: "mle",
+		sheet: "MLE"
+	},
+	{
+		db: "rgd",
+		sheet: "RGD",
+	},
+	{
+		db: "luk",
+		sheet: "LUK",
+	},
+	{
+		db: "special",
+		sheet: "SPECIAL",
 	}
 ]
 const currentStatKeys = [
@@ -228,28 +244,44 @@ const currentStatKeys = [
 		sheet: "Name"
 	},
 	{
-		db: "wit",
-		sheet: "WIT"
+		db: "str",
+		sheet: "STR"
+	},
+	{
+		db: "dex",
+		sheet: "DEX"
+	},
+	{
+		db: "int",
+		sheet: "INT"
 	},
 	{
 		db: "cha",
 		sheet: "CHA"
 	},
 	{
-		db: "str",
-		sheet: "STR"
-	},
-	{
-		db: "mve",
-		sheet: "MVE"
-	},
-	{
 		db: "dur",
 		sheet: "DUR"
 	},
 	{
-		db: "lck",
-		sheet: "LCK"
+		db: "res",
+		sheet: "RES"
+	},
+	{
+		db: "mle",
+		sheet: "MLE"
+	},
+	{
+		db: "rgd",
+		sheet: "RGD",
+	},
+	{
+		db: "luk",
+		sheet: "LUK",
+	},
+	{
+		db: "special",
+		sheet: "SPECIAL",
 	},
 	{
 		db: "reprints",
