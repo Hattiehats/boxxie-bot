@@ -1,5 +1,5 @@
 import { ActivityType } from "discord.js";
-import { pickOne } from "./utils.js";
+import { pickOne, randomActivities } from "./utils.js";
 
 const CHECK_INTERVAL = 6 * 60 * 60 * 1000; // six hours
 
