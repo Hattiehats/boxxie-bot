@@ -13,6 +13,7 @@ import {
 	currentStats,
 	getGachaItems,
 } from "../utility/classes.js";
+import { parseEmbedColour } from "../utility/format_embed.js"
 import {
 	getCustomCommandContent,
 	customCommandExists,
@@ -360,7 +361,7 @@ async function mainFunction(dailyType, userId, reply) {
 	}
 
 	// Build the response
-	const container = new ContainerBuilder().setAccentColor(11326574);
+	const container = new ContainerBuilder().setAccentColor(parseEmbedColour());
 
 	// Title
 	const typeLabel = dailyType.charAt(0).toUpperCase() + dailyType.slice(1);

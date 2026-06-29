@@ -76,7 +76,7 @@ function generateRandomEventComponent() {
 export function generateDaily() {
 	const embed = new EmbedBuilder()
 		.setTitle("Good Morning, Proxies!")
-		.setDescription("_It's a beautiful day to work at Linn Co!_")
+		.setDescription("_It's a beautiful day to work at Linne Co!_")
 		.addFields(divider)
 		.addFields(generateDailyWeatherComponent())
 
