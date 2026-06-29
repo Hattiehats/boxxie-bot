@@ -17,13 +17,12 @@ const STAT_FIELDS = [
 	{ key: 'dex', label: 'DEX', stat: true },
 	{ key: 'int', label: 'INT', stat: true },
 	{ key: 'cha', label: 'CHA', stat: true },
-	{ key: 'mve', label: 'MVE', stat: true },
 	{ key: 'dur', label: 'DUR', stat: true },
 	{ key: 'res', label: 'RES', stat: true },
 	{ key: 'mle', label: 'MLE', stat: true },
 	{ key: 'rgd', label: 'RGD', stat: true },
 	{ key: 'lck', label: 'LCK', stat: true },
-	{ key: 'special', label: 'SPECIAL', stat: true },
+	{ key: 'special', label: 'SKILL', stat: true },
 ];
 
 const ALL_FIELDS = [...COMPARE_FIELDS, ...STAT_FIELDS];
