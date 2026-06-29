@@ -426,7 +426,7 @@ async function mainFunction(dailyType, userId, reply) {
 
 	// Footer — small text balance summary (matches buy/sell pattern)
 	const updatedMun = new Mun(munData.name);
-	let footerParts = [`-# 💰 NEW BALANCE: ${updatedMun.scrip}`];
+	let footerParts = [`-# 💰 NEW BALANCE: ${updatedMun.capital}`];
 	if (amount > 0) {
 		footerParts[0] += ` (+${amount})`;
 	} else if (amount < 0) {
