@@ -37,7 +37,7 @@ const data = new SlashCommandBuilder()
             )
     );
 
-export default {
+/*export default {
     data,
     async execute(interaction) {
         const characterName = interaction.options.getString('character');
@@ -239,7 +239,7 @@ export default {
             await sendReviveMessage(message.channel, characterName);
         }
     },
-};
+}; */
 
 /**
  * Sends the zero-HP "about to pass out" message using flavor text from the "zerohp" custom command.

@@ -37,7 +37,7 @@ function buildPartyText(run) {
   return charList.trim();
 }
 
-export default {
+/*export default {
   data: commandBuilder,
   async execute(interaction) {
     await interaction.deferReply();
@@ -140,4 +140,4 @@ export default {
     );
     await message.reply({ embeds: [embed] });
   },
-};
+};*/

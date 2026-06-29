@@ -63,7 +63,7 @@ function applyLuckChange(channelId, characterName, amount, type) {
   return { oldLuck, newLuck, characterName };
 }
 
-export default {
+/*export default {
   data: commandBuilder,
   async execute(interaction) {
     const characterName = interaction.options.getString("character");
@@ -220,4 +220,4 @@ export default {
     const run = activeRuns.get(message.channel.id);
     if (run) await updateTrackerPost(message.channel, run);
   },
-};
+}; */
