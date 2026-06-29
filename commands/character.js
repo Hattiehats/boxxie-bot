@@ -103,7 +103,7 @@ function createProfileEmbed(OC) {
 				inline: true
 			},
 			{
-				name: "`SPECIAL:`",
+				name: "`SKILL:`",
 				value: `${OC.currentStats.special}`,
 				inline: false
 			},
