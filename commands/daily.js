@@ -19,7 +19,7 @@ import {
 } from "../utility/custom_commands.js";
 
 // Daily types that involve another character (PvP-flavored)
-const PVP_DAILIES = new Set(["steal", "sabotage", "cooperate"]);
+const PVP_DAILIES = new Set(["scheme", "teamup"]);
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("daily")
@@ -33,7 +33,7 @@ const commandBuilder = new SlashCommandBuilder()
 				{ name: "Work — Safe 5 capital", value: "work" },
 				{ name: "Grind — 2-10 capital", value: "grind" },
 				{ name: "Appease — Coin flip", value: "appease" },
-				{ name: "Fuck Around and Find Out— -5 to +15 capital (flavor from another OC)", value: "fuckaround" },
+				{ name: "Scheme — -5 to +15 capital (flavor from another OC)", value: "scheme" },
 				{ name: "Team Up — You get -3 to +5 capital, another OC gets +10 to +15", value: "teamup" },
 			),
 	);
@@ -233,7 +233,7 @@ function getFirstOCForMun(munName) {
 	return oc ? oc.name : null;
 }
 
-const VALID_TYPES = new Set(["work", "hustle", "overtime", "scavenge", "suckup", "sabotage", "steal", "cooperate"]);
+const VALID_TYPES = new Set(["work", "grind", "appease", "scheme", "teamup"]);
 
 async function mainFunction(dailyType, userId, reply) {
 	// Find the player's mun
@@ -293,29 +293,18 @@ async function mainFunction(dailyType, userId, reply) {
 		case "work":
 			result = rollWork();
 			break;
-		case "hustle":
+		case "grind":
 			result = rollHustle();
 			break;
-		case "steal":
-			result = rollSteal();
-			targetOC = getRandomOC(munData.name);
-			targetMunId = targetOC ? getMunIdForCharacter(targetOC) : null;
-			break;
-		case "scavenge":
-			result = rollScavenge();
-			break;
-		case "suckup":
+		case "appease":
 			result = rollSuckup();
 			break;
-		case "sabotage":
+		case "scheme":
 			result = rollSabotage();
 			targetOC = getRandomOC(munData.name);
 			targetMunId = targetOC ? getMunIdForCharacter(targetOC) : null;
 			break;
-		case "overtime":
-			result = rollOvertime();
-			break;
-		case "cooperate":
+		case "teamup":
 			result = rollCooperate();
 			targetOC = getRandomOC(munData.name);
 			targetMunId = targetOC ? getMunIdForCharacter(targetOC) : null;
