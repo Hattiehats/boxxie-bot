@@ -11,6 +11,7 @@ export const randomActivities = [
 	"Auditing IRIS logs...",
 	"Deleting unnecessary security footage...",
 	"Reviewing singularity reports...",
+	"Filing SingulariTEA Loyalty cards..."
 ];
 
 /**

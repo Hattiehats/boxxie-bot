@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Mun } from '../utility/classes.js';
+import { fuzzyMatchOnTable } from '../utility/utils.js';
 import { basicEmbed, parseEmbedColour } from '../utility/format_embed.js';
 
 // Maps shorthand command names → mechanics table "type" values
@@ -30,6 +31,13 @@ const commandBuilder = new SlashCommandBuilder()
 			.setDescription('e.g. "fullrendered 3 bg, words 1000, commission 2"')
 			.setRequired(true)
 			.setAutocomplete(true)
+	)
+	.addIntegerOption((option) =>
+		option
+			.setName('count')
+			.setDescription('Number to log. Should be word count or number of images')
+			.setMinValue(1)
+			.setRequired(true)
 	)
 	.addUserOption(option =>
 		option.setName('user')
@@ -183,7 +191,7 @@ export default {
 	},
 	async autocomplete(interaction) {
 		const focusValue = interaction.options.getFocused();
-		const filter = fuzzyMatchOnTable(focusValue, 25, 'mechanics', 'Submission Type')
+		const filter = fuzzyMatchOnTable(focusValue, 25, 'mechanics', 'type')
 		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
 	}
 }

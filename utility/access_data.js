@@ -332,6 +332,10 @@ const mechanicKeys = [
 		sheet: "Rate"
 	},
 	{
+		db: "currency",
+		sheet: "Currency"
+	},
+	{
 		db: "description",
 		sheet: "Description"
 	},
