@@ -9,9 +9,13 @@ export const ADMIN_ROLE_IDS = [
 export const randomActivities = [
 	"Waiting for the subway...",
 	"Auditing IRIS logs...",
-	"Deleting unnecessary security footage...",
+	"Deleting \"unnecessary\" security footage...",
+	"Bribing government officials...",
 	"Reviewing singularity reports...",
-	"Filing SingulariTEA Loyalty cards..."
+	"Printing SingulariTEA Loyalty cards...",
+	"Watching k-dramas on company time...",
+	"Filing reconstruction requests...",
+	"Relaxing on the Linne Co roof..."
 ];
 
 /**
