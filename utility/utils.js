@@ -2,8 +2,9 @@ import { getTableData } from './access_data.js';
 
 // Role IDs that grant admin/mod privileges
 export const ADMIN_ROLE_IDS = [
-	'1459657838115950734',
-	'1469430982296731850',
+  '1507956952221749369',
+  '1515715187708137666',
+  '1515715563937202226'
 ];
 
 export const randomActivities = [
