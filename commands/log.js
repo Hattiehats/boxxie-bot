@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Mun } from '../utility/classes.js';
 import { fuzzyMatchOnTable } from '../utility/utils.js';
-import { basicEmbed, parseEmbedColour } from '../utility/format_embed.js';
+import { basicEmbed, embedColour, parseEmbedColour } from '../utility/format_embed.js';
 
 // Maps shorthand command names → mechanics table "type" values
 const TYPE_ALIASES = {
@@ -38,12 +38,6 @@ const commandBuilder = new SlashCommandBuilder()
 			.setDescription('Number to log. Should be word count or number of images')
 			.setRequired(true)
 			.setMinValue(1)
-	)
-	.addStringOption((option) =>
-		option.setName('multiplier')
-			.setDescription("A multiplier, if any")
-			.setRequired(false)
-			.setAutocomplete(true)
 	)
 	.addUserOption(option =>
 		option.setName('user')
@@ -147,11 +141,11 @@ function formatBreakdown(entries, totalPayout) {
 			});
 			label += ` (${modNames.join(', ')})`;
 		}
-		lines.push(`${label} = ${entry.totalPayout.toLocaleString()} scrip`);
+		lines.push(`${label} = ${entry.totalPayout.toLocaleString()} Capital`);
 	}
 	if (entries.length > 1) {
 		lines.push('───────────────────────');
-		lines.push(`TOTAL = ${totalPayout.toLocaleString()} scrip`);
+		lines.push(`TOTAL = ${totalPayout.toLocaleString()} Capital`);
 	}
 	return lines.join('\n');
 }
@@ -160,7 +154,7 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 	const result = parseSubmission(submissionStr);
 	if (result.error) {
 		const errEmbed = basicEmbed('', result.error, '', '', '', false);
-		errEmbed.setColor("#e74c3c");
+		errEmbed.setColor(embedColour(false));
 		await replyTarget.reply({ embeds: [errEmbed], ephemeral: true });
 		return;
 	}
@@ -180,10 +174,10 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 
 	const breakdown = formatBreakdown(entries, totalPayout);
 	const message =
-		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} scrip to ${thisMun.name}'s wallet!\`\`\`**`;
+		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} Capital to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
-	embed.setColor(parseEmbedColour());
-	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.scrip} scrip` });
+	embed.setColor(embedColour(true));
+	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.scrip} Capital` });
 
 	await replyTarget.reply({ embeds: [embed] });
 }
@@ -198,8 +192,5 @@ export default {
 	async autocomplete(interaction) {
 		const focusValue = interaction.options.getFocused(true);
 		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type')
-		await interaction.respond(filter
-			.filter(option => option['category'].toLowerCase() == focusValue.name)
-			.map((choice) => ({ name: choice, value: choice })));
 	}
 }
