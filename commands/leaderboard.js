@@ -21,7 +21,7 @@ function getSortedMuns(muns) {
 	return muns
 		.filter(m => m.status === 'Active')
 		.map(m => ({ name: m.name, capital: parseScrip(m.capital) }))
-		.sort((a, b) => b.scrip - a.scrip);
+		.sort((a, b) => b.capital - a.capital);
 }
 
 function buildPage(sorted, pageNum) {
