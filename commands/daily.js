@@ -6,7 +6,7 @@ import {
 	SeparatorBuilder,
 	SeparatorSpacingSize,
 } from "discord.js";
-import { getTableData, getData, updateData, getTimeUntilNextSync, getTimeUntilTimestamp } from "../utility/access_data.js";
+import { getTableData, getData, updateData, getTimeUntilNextSync, generateMidnightTZ, getTimeUntilTimestamp } from "../utility/access_data.js";
 import {
 	Mun,
 	Character,
@@ -352,11 +352,11 @@ async function mainFunction(dailyType, userId, reply) {
 	}
 
 	// Mark daily as used (store timestamp)
-	await updateData("currentStats", "name", ocName, "daily", String(generateMidnightTZ().now()));
+	await updateData("currentStats", "name", ocName, "daily", String(generateMidnightTZ().valueOf()));
 
 	// Apply consequence (overtime exhaustion)
 	if (result.exhausted) {
-		await updateData("currentStats", "name", ocName, "dailyConsequence", String(generateMidnightTZ(2).now()));
+		await updateData("currentStats", "name", ocName, "dailyConsequence", String(generateMidnightTZ(2).valueOf()));
 	}
 
 	// Build the response
