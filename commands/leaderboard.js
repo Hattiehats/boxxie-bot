@@ -20,7 +20,7 @@ function formatScrip(amount) {
 function getSortedMuns(muns) {
 	return muns
 		.filter(m => m.status === 'Active')
-		.map(m => ({ name: m.name, scrip: parseScrip(m.capital) }))
+		.map(m => ({ name: m.name, capital: parseScrip(m.capital) }))
 		.sort((a, b) => b.scrip - a.scrip);
 }
 
@@ -32,7 +32,7 @@ function buildPage(sorted, pageNum) {
 	const lines = chunk.map((entry, idx) => {
 		const rank = start + idx + 1;
 		const prefix = rank <= 3 ? MEDALS[rank - 1] : `\`${rank}.\``;
-		return `${prefix}  **${entry.name}** — \`${formatScrip(entry.capital)}\` capital`;
+		return `${prefix}  **${entry.name}** — \`${entry.capital}\` capital`;
 	});
 
 	const title = totalPages > 1
