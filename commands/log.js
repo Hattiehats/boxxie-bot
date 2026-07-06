@@ -199,7 +199,7 @@ export default {
 		const focusValue = interaction.options.getFocused(true);
 		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type')
 		await interaction.respond(filter
-			.filter(option => option)
+			.filter(option => option['category'].toLowerCase() == focusValue.name)
 			.map((choice) => ({ name: choice, value: choice })));
 	}
 }
