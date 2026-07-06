@@ -32,13 +32,6 @@ const commandBuilder = new SlashCommandBuilder()
 			.setRequired(true)
 			.setAutocomplete(true)
 	)
-	.addIntegerOption((option) =>
-		option
-			.setName('count')
-			.setDescription('Number to log. Should be word count or number of images')
-			.setRequired(true)
-			.setMinValue(1)
-	)
 	.addUserOption(option =>
 		option.setName('user')
 			.setDescription('The user to submit for. Defaults to you.')
@@ -177,7 +170,7 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} Capital to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
 	embed.setColor(embedColour(true));
-	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.scrip} Capital` });
+	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.capital} Capital` });
 
 	await replyTarget.reply({ embeds: [embed] });
 }
