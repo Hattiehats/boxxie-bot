@@ -304,7 +304,6 @@ async function mainFunction(dailyType, userId, reply) {
 			result = rollSabotage();
 			targetOC = getRandomOC(munData.name);
 			targetMunId = targetOC ? getMunIdForCharacter(targetOC) : null;
-			console.log(`Scheme rolled ${targetOC} target, id ${targetMunId}`);
 			break;
 		case "teamup":
 			result = rollCooperate();
@@ -395,7 +394,6 @@ async function mainFunction(dailyType, userId, reply) {
 	// For PvP dailies, add target info
 	let pvpText = "";
 	if (PVP_DAILIES.has(dailyType) && targetOC) {
-		console.log(`DAILY: ${dailyType} IS PVP TYPE, TARGET: ${targetOC}`);
 		const targetTag = targetMunId ? ` (<@${targetMunId}>)` : "";
 		if (dailyType === "scheme") {
 			pvpText = `You messed with **${targetOC.name}**'s workspace${targetTag}!\n`;
