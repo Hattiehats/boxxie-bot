@@ -6,14 +6,14 @@ import {
 	SeparatorBuilder,
 	SeparatorSpacingSize,
 } from "discord.js";
-import { getTableData, getData, updateData, getTimeUntilNextSync } from "../utility/access_data.js";
+import { getTableData, getData, updateData, getTimeUntilNextSync, getTimeUntilTimestamp } from "../utility/access_data.js";
 import {
 	Mun,
 	Character,
 	currentStats,
 	getGachaItems,
 } from "../utility/classes.js";
-import { parseEmbedColour } from "../utility/format_embed.js"
+import { embedColour, parseEmbedColour } from "../utility/format_embed.js"
 import {
 	getCustomCommandContent,
 	customCommandExists,
@@ -86,25 +86,25 @@ function checkDailyAvailability(ocName) {
 	const stats = new currentStats(ocName);
 
 	// Check consequence (overtime exhaustion blocks daily)
-	if (stats.dailyConsequence && stats.dailyConsequence.toLowerCase() === "exhausted") {
-		const remaining = getTimeUntilNextSync();
-		return {
-			canUse: false,
-			reason: remaining > 0
-				? `You're too exhausted from overtime to work today. Next reset in **${formatTimeRemaining(remaining)}**.`
-				: "You're too exhausted from overtime to work today. Get some rest and try again after the next reset!",
-		};
+	if (stats.dailyConsequence) {
+		const remaining = getTimeUntilTimestamp(stats.dailyConsequence);
+		if (remaining > 0) {
+			return {
+				canUse: false,
+				reason: `You're too exhausted to work today. Try again in **${formatTimeRemaining(remaining)}** and get some rest!`,
+			};
+		}
 	}
 
-	// Check if already used this cycle (field is cleared by periodic sync)
-	if (stats.daily && stats.daily.trim() !== "") {
-		const remaining = getTimeUntilNextSync();
-		return {
-			canUse: false,
-			reason: remaining > 0
-				? `You've already done your daily! Next reset in **${formatTimeRemaining(remaining)}**.`
-				: "You've already done your daily! It will reset on the next sync cycle.",
-		};
+	// Check if the time for the next daily has passed
+	if (stats.daily) {
+		const remaining = getTimeUntilTimestamp(stats.daily);
+		if (remaining > 0) {
+			return {
+				canUse: false,
+				reason: `You've already done your daily! Next reset in **${formatTimeRemaining(remaining)}**.`
+			};
+		}
 	}
 
 	return { canUse: true };
@@ -244,7 +244,7 @@ async function mainFunction(dailyType, userId, reply) {
 		return reply({
 			components: [
 				new ContainerBuilder()
-					.setAccentColor(11326574)
+					.setAccentColor(embedColour(false))
 					.addTextDisplayComponents(
 						new TextDisplayBuilder().setContent("### Could not find your profile!"),
 					),
@@ -261,7 +261,7 @@ async function mainFunction(dailyType, userId, reply) {
 		return reply({
 			components: [
 				new ContainerBuilder()
-					.setAccentColor(11326574)
+					.setAccentColor(embedColour(false))
 					.addTextDisplayComponents(
 						new TextDisplayBuilder().setContent("### You need at least one OC to use daily!"),
 					),
@@ -276,7 +276,7 @@ async function mainFunction(dailyType, userId, reply) {
 		return (reply)({
 			components: [
 				new ContainerBuilder()
-					.setAccentColor(11326574)
+					.setAccentColor(embedColour(false))
 					.addTextDisplayComponents(
 						new TextDisplayBuilder().setContent(`### ⏰ Daily Unavailable\n${availability.reason}`),
 					),
@@ -352,15 +352,15 @@ async function mainFunction(dailyType, userId, reply) {
 	}
 
 	// Mark daily as used (store timestamp)
-	await updateData("currentStats", "name", ocName, "daily", String(Date.now()));
+	await updateData("currentStats", "name", ocName, "daily", String(generateMidnightTZ().now()));
 
 	// Apply consequence (overtime exhaustion)
 	if (result.exhausted) {
-		await updateData("currentStats", "name", ocName, "dailyConsequence", "exhausted");
+		await updateData("currentStats", "name", ocName, "dailyConsequence", String(generateMidnightTZ(2).now()));
 	}
 
 	// Build the response
-	const container = new ContainerBuilder().setAccentColor(parseEmbedColour());
+	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 
 	// Title
 	const typeLabel = dailyType.charAt(0).toUpperCase() + dailyType.slice(1);
@@ -394,6 +394,7 @@ async function mainFunction(dailyType, userId, reply) {
 	// For PvP dailies, add target info
 	let pvpText = "";
 	if (PVP_DAILIES.has(dailyType) && targetOC) {
+		console.log(`DAILY: ${dailyType} IS PVP TYPE, TARGET: ${targetOC}`);
 		const targetTag = targetMunId ? ` (<@${targetMunId}>)` : "";
 		if (dailyType === "scheme") {
 			pvpText = `You messed with **${targetOC.name}**'s workspace${targetTag}!\n`;

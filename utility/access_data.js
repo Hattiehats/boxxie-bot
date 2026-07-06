@@ -3,6 +3,7 @@ import { SheetTable } from "./classes.js";
 import { existsSync } from "node:fs";
 import { Low } from "lowdb";
 import { generateDaily } from "./dailies.js";
+import { DateTime } from "luxon";
 
 export const SHEET_RANGES = [
 	{
@@ -945,6 +946,16 @@ function consolidateInventoryCache() {
 let syncTimer = null;
 let nextSyncAt = null;
 
+export function generateMidnightTZ(days_increment = 1) {
+	const now = new DateTime().now().setZone(process.env.TZ ?? 'America/New_York');
+	return now.plus({ days: days_increment }).startOf('day').toJSDate();
+}
+
+export function getTimeUntilTimestamp(target) {
+	const now = new Date();
+	const then = new Date(target);
+	return then.getTime() - now.getDate();
+}
 /** Returns ms until the next midnight in America/New_York (EST/EDT). */
 function msUntilMidnightEST() {
 	const now = new Date();
