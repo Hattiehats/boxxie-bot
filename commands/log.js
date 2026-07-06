@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
 import { Mun } from '../utility/classes.js';
 import { fuzzyMatchOnTable } from '../utility/utils.js';
-import { basicEmbed, embedColour, parseEmbedColour } from '../utility/format_embed.js';
+import { basicEmbed, embedColour } from '../utility/format_embed.js';
 
 // Maps shorthand command names → mechanics table "type" values
 const TYPE_ALIASES = {
@@ -96,6 +96,7 @@ function parseSubmission(submissionStr) {
 
 			const modCategory = (modData.category || '').toLowerCase();
 			if (modCategory !== 'multiplier') {
+
 				return { error: `**${tokens[i]}** can't be used as a modifier — submit it as a separate entry!` };
 			}
 

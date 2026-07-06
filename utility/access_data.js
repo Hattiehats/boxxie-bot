@@ -32,7 +32,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "Mechanics",
-		range: "A:C",
+		range: "A:F",
 	},
 	{
 		sheet: "Flavor Text",
