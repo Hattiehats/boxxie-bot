@@ -6,6 +6,10 @@ export function parseEmbedColour(colour) {
 	return colourString ? parseInt(colourString, 16) : 0x00ff00;
 }
 
+export function embedColour(success) {
+	return parseEmbedColour( success ? process.env.EMBED_SUCCESS_COLOUR : process.env.EMBED_FAIL_COLOUR);
+}
+
 export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({

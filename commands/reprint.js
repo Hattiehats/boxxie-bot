@@ -3,7 +3,7 @@ import { TextDisplayBuilder, ThumbnailBuilder, SectionBuilder, ContainerBuilder,
 import { Character, getFlavorText } from '../utility/classes.js';
 import { getTableData } from '../utility/access_data.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
-import { basicEmbed } from '../utility/format_embed.js';
+import { embedColour, basicEmbed } from '../utility/format_embed.js';
 // import { AB_DATA } from '../initialize-data.js';
 
 // let compMessage = AB_DATA.getFlavorText("Reprint_Warning");
@@ -73,10 +73,10 @@ async function reprintMessage(interaction) {
 	const ocName = interaction.options.getString("oc");
 
 	const reprintContent = `### ${ocName} has been cleanly reconstructed. Please resume your duties.`;
-	const errorContent = `\`\`\`While reconstructing ${ocName}, something went wrong! They've had a RECON ERROR. You may decide the error for yourself, or you may roll 1d10 to pick an error from this table. Effects may be flavored however you like.\`\`\`\n**You come back from the recon process...**\n> \`1.)\` - With a different hair and/or eye color.\n> \`2.)\` - 1d6 inches shorter.\n> \`3.)\` - 1d6 inches taller.\n> \`4.)\` - Differently colored blood.\n> \`5.)\` - With impaired functioning in part of their body.\n> \`6.)\` - With a seemingly permanent illness they didn't have before. \n> \`7.)\` - With sudden chronic pain.\n> \`8.)\` - With personality change. (Less irritable, etc.)\n> \`9.)\` - With a gap in their memory.\n> \`10.)\` - Missing part of their body.\`\`\`This error will impact you until your next recon.\`\`\``;
+	const errorContent = `\`\`\`ini\nWhile reconstructing ${ocName}, something went wrong! They've had an [ENTROPIC RECONSTRUCTION VARIATION]. You may decide the error for yourself, or you may roll 1d10 to pick an error from this table. Effects may be flavored however you like.\`\`\`\n**You come back from the recon process...**\n> \`1.)\` - With a different hair and/or eye color.\n> \`2.)\` - 1d6 inches shorter.\n> \`3.)\` - 1d6 inches taller.\n> \`4.)\` - Differently colored blood.\n> \`5.)\` - With impaired functioning in part of their body.\n> \`6.)\` - With a seemingly permanent illness they didn't have before. \n> \`7.)\` - With sudden chronic pain.\n> \`8.)\` - With personality change. (Less irritable, etc.)\n> \`9.)\` - With a gap in their memory.\n> \`10.)\` - Missing part of their body.\`\`\`This error will impact you until your next recon.\`\`\``;
 	const reprintConfirmMessage = [
 		new ContainerBuilder()
-			.setAccentColor(11326574)
+			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(
 				new TextDisplayBuilder().setContent(reprintContent),
 			)
@@ -84,7 +84,7 @@ async function reprintMessage(interaction) {
 
 	const errorMessage = [
 		new ContainerBuilder()
-			.setAccentColor(11326574)
+			.setAccentColor(embedColour(false))
 			.addTextDisplayComponents(
 				new TextDisplayBuilder().setContent(errorContent),
 			)
