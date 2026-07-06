@@ -192,5 +192,6 @@ export default {
 	async autocomplete(interaction) {
 		const focusValue = interaction.options.getFocused(true);
 		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type')
+		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
 	}
 }
