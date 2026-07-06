@@ -7,9 +7,15 @@ export function parseEmbedColour(colour) {
 }
 
 export function embedColour(success) {
-	return parseEmbedColour( success ? process.env.EMBED_SUCCESS_COLOUR : process.env.EMBED_FAIL_COLOUR);
+	return parseEmbedColour(success ? process.env.EMBED_SUCCESS_COLOUR : process.env.EMBED_FAIL_COLOUR);
 }
 
+const iconList = [
+	'https://img.icons8.com/?size=96&id=63804&format=png',
+	'https://img.icons8.com/?size=80&id=21392&format=png',
+	'https://img.icons8.com/?size=48&id=21079&format=png',
+]
+// "https://img.icons8.com/?size=100&id=lTImOaDFYG9P&format=png&color=000000"
 export function addStandardFormat(embedBuilder) {
 	embedBuilder
 		.setAuthor({
@@ -19,7 +25,7 @@ export function addStandardFormat(embedBuilder) {
 		.setColor(parseEmbedColour())
 		.setFooter({
 			text: pickOne(potentialFooterTexts),
-			iconURL: "https://img.icons8.com/?size=100&id=lTImOaDFYG9P&format=png&color=000000",
+			iconURL: pickOne(iconList),
 		});
 
 	return embedBuilder;
