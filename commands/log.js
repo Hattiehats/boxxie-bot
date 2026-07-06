@@ -26,10 +26,16 @@ const TYPE_ALIASES = {
 const commandBuilder = new SlashCommandBuilder()
 	.setName('submit')
 	.setDescription('Submit art, writing, or other work for Capital or LLT')
-	.addStringOption(option =>
+	.addStringOption((option) =>
 		option.setName('submission')
 			.setDescription('e.g. "fullrendered 3 bg, words 1000, commission 2"')
 			.setRequired(true)
+			.setAutocomplete(true)
+	)
+	.addStringOption((option) =>
+		option.setName('multiplier')
+			.setDescription("A multiplier, if any")
+			.setRequired(false)
 			.setAutocomplete(true)
 	)
 	.addIntegerOption((option) =>
@@ -161,7 +167,7 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 
 	const { entries, totalPayout } = result;
 
-	const allMuns = await getTableData('muns');
+	const allMuns = getTableData('muns');
 	const munData = allMuns.find(row => row.id === targetUser.id);
 	if (!munData) {
 		await replyTarget.reply({ content: "Couldn't find that user's profile!", ephemeral: true });
@@ -190,8 +196,10 @@ export default {
 		await mainFunction(interaction, submissionStr, targetUser);
 	},
 	async autocomplete(interaction) {
-		const focusValue = interaction.options.getFocused();
-		const filter = fuzzyMatchOnTable(focusValue, 25, 'mechanics', 'type')
-		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
+		const focusValue = interaction.options.getFocused(true);
+		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type')
+		await interaction.respond(filter
+			.filter(option => option)
+			.map((choice) => ({ name: choice, value: choice })));
 	}
 }
