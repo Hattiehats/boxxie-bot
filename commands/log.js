@@ -32,18 +32,18 @@ const commandBuilder = new SlashCommandBuilder()
 			.setRequired(true)
 			.setAutocomplete(true)
 	)
+	.addIntegerOption((option) =>
+		option
+			.setName('count')
+			.setDescription('Number to log. Should be word count or number of images')
+			.setRequired(true)
+			.setMinValue(1)
+	)
 	.addStringOption((option) =>
 		option.setName('multiplier')
 			.setDescription("A multiplier, if any")
 			.setRequired(false)
 			.setAutocomplete(true)
-	)
-	.addIntegerOption((option) =>
-		option
-			.setName('count')
-			.setDescription('Number to log. Should be word count or number of images')
-			.setMinValue(1)
-			.setRequired(true)
 	)
 	.addUserOption(option =>
 		option.setName('user')
