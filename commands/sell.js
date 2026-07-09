@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import { Item, Mun } from "../utility/classes.js";
 import { fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed, parseEmbedColour } from "../utility/format_embed.js";
+import { basicEmbed, embedColour, parseEmbedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("sell")
@@ -34,7 +34,7 @@ const commandBuilder = new SlashCommandBuilder()
 
 const errorComponent = [
 	new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent("### Sorry! I ran into an error :("),
 		),
@@ -42,7 +42,7 @@ const errorComponent = [
 
 const cancelComponent = [
 	new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent("## Sale Canceled! \uD83D\uDEAB"),
 		),
@@ -50,7 +50,7 @@ const cancelComponent = [
 
 function getNotSellableComponent(itemName) {
 	return [
-		new ContainerBuilder().setAccentColor(11326574).addTextDisplayComponents(
+		new ContainerBuilder().setAccentColor(embedColour(false)).addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
 				`**\`\`\`ERROR: ${itemName} cannot be sold!\`\`\`**`,
 			),
@@ -60,10 +60,10 @@ function getNotSellableComponent(itemName) {
 
 function getSellConfirmContainer(itemName, quantity, sellPrice, currentBalance, itemThumb) {
 	const totalValue = sellPrice * quantity;
-	const message1 = `Are you sure you want to sell (${quantity}x) **${itemName}** for **${totalValue} scrip**?`;
-	const message2 = `> \uD83D\uDCB0 Your current scrip balance: \`${currentBalance}\``;
+	const message1 = `Are you sure you want to sell (${quantity}x) **${itemName}** for **${totalValue} Capital**?`;
+	const message2 = `> \uD83D\uDCB0 Your current balance: \`${currentBalance}\``;
 
-	const container = new ContainerBuilder().setAccentColor(11326574);
+	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 	const texts = [
 		new TextDisplayBuilder().setContent("## Confirm Sale"),
 		new TextDisplayBuilder().setContent(message1),
@@ -100,7 +100,7 @@ function getSoldComponent(itemName, quantity, newBalance) {
 	const message = `## Sold (${quantity}x) ${itemName}! \uD83D\uDCB0`;
 	return [
 		new ContainerBuilder()
-			.setAccentColor(11326574)
+			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(message))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance}`)),
 	];
