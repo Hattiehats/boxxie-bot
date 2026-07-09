@@ -154,7 +154,7 @@ async function mainFunction(interaction) {
 		const sellTotal = item.sellPrice * quantity;
 		await mun.addScrip(sellTotal);
 		await interaction.editReply({
-			components: getSoldComponent(itemName, quantity, mun.scrip),
+			components: getSoldComponent(itemName, quantity, mun.capital),
 			flags: MessageFlags.IsComponentsV2,
 		});
 	} catch {
@@ -189,59 +189,5 @@ export default {
 		} catch {
 			await interaction.respond([]);
 		}
-	},
-	async executePrefix(message, args) {
-		if (!args) {
-			await message.reply('Usage: `!sell <item> [quantity]`');
-			return;
-		}
-		const parts = args.trim().split(/\s+/);
-		let quantity = 1;
-		const lastPart = parts[parts.length - 1];
-		if (/^\d+$/.test(lastPart) && parts.length > 1) {
-			quantity = parseInt(lastPart);
-			parts.pop();
-		}
-		const itemName = parts.join(' ');
-		let item;
-		try {
-			item = new Item(itemName);
-		} catch {
-			await message.reply(`Item "${itemName}" not found.`);
-			return;
-		}
-		if (!item.sellPrice || isNaN(item.sellPrice) || item.sellPrice <= 0) {
-			await message.reply(`**${item.name}** cannot be sold!`);
-			return;
-		}
-		const munID = message.author.id;
-		const allMuns = getTableData("muns");
-		const munData = allMuns.find(row => row.id === munID);
-		if (!munData) {
-			await message.reply("Couldn't find your profile!");
-			return;
-		}
-		const mun = new Mun(munData.name);
-		const inventory = await mun.inventory;
-		if (!inventory.checkInventory(itemName)) {
-			await message.reply(`You don't have **${itemName}** in your inventory!`);
-			return;
-		}
-		const ownedQty = inventory.getItemQuantity(itemName);
-		if (ownedQty < quantity) {
-			await message.reply(`You only have ${ownedQty}x **${itemName}**.`);
-			return;
-		}
-		await inventory.addItem(itemName, -quantity);
-		const sellTotal = item.sellPrice * quantity;
-		await mun.addScrip(sellTotal);
-		const embed = basicEmbed(
-			`Sold (${quantity}x) ${item.name}! \uD83D\uDCB0`,
-			'',
-			item.image || '', '', '', false
-		);
-		embed.setColor(parseEmbedColour());
-		embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
-		await message.reply({ embeds: [embed] });
 	},
 };
