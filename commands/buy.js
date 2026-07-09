@@ -18,7 +18,7 @@ import {
 	Mun,
 } from "../utility/classes.js";
 import { getBuyConfirmContainer, fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed, parseEmbedColour } from "../utility/format_embed.js";
+import { basicEmbed, embedColour, parseEmbedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("buy")
@@ -38,7 +38,7 @@ const commandBuilder = new SlashCommandBuilder()
 
 const errorComponent = [
 	new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent("### Sorry! I ran into an error :("),
 		),
@@ -46,7 +46,7 @@ const errorComponent = [
 
 const cancelComponent = [
 	new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent("## Purchase Canceled! \uD83D\uDEAB"),
 		),
@@ -54,7 +54,7 @@ const cancelComponent = [
 
 function getNotPurchasableComponent(itemName) {
 	return [
-		new ContainerBuilder().setAccentColor(11326574).addTextDisplayComponents(
+		new ContainerBuilder().setAccentColor(embedColour(false)).addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
 				`**\`\`\`ERROR: ${itemName} is not available for purchase!\`\`\`**`,
 			),
@@ -64,10 +64,10 @@ function getNotPurchasableComponent(itemName) {
 
 function getScripErrorComponent(mun, amount) {
 	return [
-		new ContainerBuilder().setAccentColor(11326574).addTextDisplayComponents(
+		new ContainerBuilder().setAccentColor(embedColour(false)).addTextDisplayComponents(
 			new TextDisplayBuilder()
-				.setContent(`**\`\`\`ERROR: Not enough scrip in ${mun.name}'s wallet, cannot remove ${amount} scrip!\`\`\`**
-                                \uD83D\uDCB0 **BALANCE:** \`${mun.scrip}\` scrip`),
+				.setContent(`**\`\`\`ERROR: Not enough capital in ${mun.name}'s wallet to pay ${amount}!\`\`\`**
+                                \uD83D\uDCB0 **BALANCE:** \`${mun.capital}\` capital`),
 		),
 	];
 }
@@ -79,7 +79,7 @@ function getPurchasedComponent(itemName, quantity, newBalance) {
 			.replace("[ITEM_NAME]", itemName);
 	return [
 		new ContainerBuilder()
-			.setAccentColor(11326574)
+			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(message))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance}`)),
 	];
@@ -109,13 +109,13 @@ async function mainFunction(interaction) {
 
 	try {
 		await (await mun.inventory).buyItem(itemName, quantity);
-		const newBalance = mun.scrip;
+		const newBalance = mun.capital;
 		await interaction.editReply({
 			components: getPurchasedComponent(itemName, quantity, newBalance),
 			flags: MessageFlags.IsComponentsV2,
 		});
 	} catch (error) {
-		if (error.message === "Not enough scrip!") {
+		if (error.message === "Not enough capital!") {
 			await interaction.editReply({
 				components: getScripErrorComponent(mun, quantity),
 				flags: MessageFlags.IsComponentsV2,
@@ -182,11 +182,11 @@ export default {
 				item.image || '', '', '', false
 			);
 			embed.setColor(parseEmbedColour());
-			embed.setFooter({ text: `💰 NEW BALANCE: ${mun.scrip} scrip` });
+			embed.setFooter({ text: `💰 NEW BALANCE: ${mun.capital} capital` });
 			await message.reply({ embeds: [embed] });
 		} catch (error) {
-			if (error.message === "Not enough scrip!") {
-				await message.reply(`Not enough scrip! You have \`${mun.scrip}\` scrip but need \`${item.buyPrice * quantity}\`.`);
+			if (error.message === "Not enough capital!") {
+				await message.reply(`Not enough capital! You have \`${mun.capital}\` scrip but need \`${item.buyPrice * quantity}\`.`);
 			} else {
 				await message.reply(`Error: ${error.message}`);
 			}
