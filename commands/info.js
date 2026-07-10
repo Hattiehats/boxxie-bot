@@ -51,13 +51,13 @@ function resolveEntry(name) {
 // ── Item display (mirrors /item) ──
 
 function buildItemInfoComponents(item, ownedQty) {
-	const container = new ContainerBuilder().setAccentColor(11326574);
+	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 
 	const priceInfo = [];
 	if (item.buyPrice && !isNaN(item.buyPrice) && item.buyPrice > 0)
-		priceInfo.push(`**Buy Price:** \`${item.buyPrice} scrip\``);
+		priceInfo.push(`**Buy Price:** \`${item.buyPrice} capital\``);
 	if (item.sellPrice && !isNaN(item.sellPrice) && item.sellPrice > 0)
-		priceInfo.push(`**Sell Price:** \`${item.sellPrice} scrip\``);
+		priceInfo.push(`**Sell Price:** \`${item.sellPrice} capital\``);
 
 	const infoTexts = [
 		new TextDisplayBuilder().setContent(`## ${item.name}`),
@@ -283,6 +283,7 @@ async function handleItemCollector(interaction, reply, item, _inventory) {
 			new UserSelectMenuBuilder()
 				.setCustomId("info:giftuser")
 				.setPlaceholder("Select a user to gift to...")
+				.setAccentColor(embedColour(true))
 				.setMinValues(1)
 				.setMaxValues(1),
 		);
