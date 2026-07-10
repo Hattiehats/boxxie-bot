@@ -34,15 +34,15 @@ export function getBuyConfirmContainer(
 ) {
 	let message1 =
 		"Are you sure you want to buy ([QTY]x) **[ITEM_NAME]** for **[PRICE]**?";
-	let message2 = "> 💰Your current capital balance: `[BALANCE]`";
+	let message2 = "> 💰Your current capital: `[BALANCE]`";
 
 	message1 = message1
 		.replace("[QTY]", itemQty)
 		.replace("[ITEM_NAME]", itemName)
-		.replace("[PRICE]", `${itemPrice} scrip`);
+		.replace("[PRICE]", `${itemPrice} Capital`);
 	message2 = message2.replace("[BALANCE]", currentBalance);
 
-	const container = new ContainerBuilder().setAccentColor(11326574);
+	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 	const textComponents = [
 		new TextDisplayBuilder().setContent("## Confirm Purchase"),
 		new TextDisplayBuilder().setContent(message1),
@@ -122,7 +122,7 @@ export function getItemInfoContainer(
 			.setCustomId("buy_item"),
 	);
 
-	const infoContainer = new ContainerBuilder().setAccentColor(11326574);
+	const infoContainer = new ContainerBuilder().setAccentColor(embedColour(true));
 	const infoTexts = [
 		new TextDisplayBuilder().setContent(message1),
 		new TextDisplayBuilder().setContent(message2),
@@ -297,7 +297,7 @@ export function getInventoryComponents(inventory, filter = "ALL", page = 0, sort
 	);
 
 	const container = new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(true))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
 				`## ${inventory.mun.name}'s Inventory`,
@@ -385,7 +385,7 @@ export function getConfirmUseComponents(
 	);
 	const message2 = "> 📦**CURRENT QUANTITY:** [QTY]".replace("[QTY]", quantity);
 
-	const useContainer = new ContainerBuilder().setAccentColor(11326574);
+	const useContainer = new ContainerBuilder().setAccentColor(embedColour(true));
 	const useTexts = [
 		new TextDisplayBuilder().setContent("## Use Item?"),
 		new TextDisplayBuilder().setContent(message1),
