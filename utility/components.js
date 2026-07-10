@@ -13,6 +13,7 @@ import {
 import { StringSelectMenuBuilder } from "discord.js";
 import { Inventory } from "./classes.js";
 import { getData } from "./access_data.js";
+import { embedColour } from "./format_embed.js";
 
 /**
  * Description placeholder
@@ -538,23 +539,23 @@ export function fuzzyMatchItems(choices, query, limit = 25) {
 
 export const errorComponent = [
 	new ContainerBuilder()
-		.setAccentColor(11326574)
+		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent("### Sorry! I ran into an error :("),
+			new TextDisplayBuilder().setContent("### ERROR"),
 		),
 ];
 
-export function simpleComponent(message, thumbnail = "") {
+export function simpleComponent(message, thumbnail = "", success = true) {
 	let output;
 	if (thumbnail === "") {
 		output = [new ContainerBuilder()
-			.setAccentColor(11326574)
+			.setAccentColor(embedColour(success))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(message))
 		];
 	} else {
 		output = [
 			new ContainerBuilder()
-				.setAccentColor(11326574)
+				.setAccentColor(embedColour(success))
 				.addSectionComponents(
 					new SectionBuilder()
 						.setThumbnailAccessory(new ThumbnailBuilder().setURL(thumbnail))
