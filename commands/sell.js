@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import { Item, Mun } from "../utility/classes.js";
 import { fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed, embedColour, parseEmbedColour } from "../utility/format_embed.js";
+import { embedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("sell")
@@ -29,6 +29,7 @@ const commandBuilder = new SlashCommandBuilder()
 	.addIntegerOption((option) =>
 		option
 			.setName("quantity")
+			.setMinValue(1)
 			.setDescription("How many do you want to sell? Defaults to 1."),
 	);
 
