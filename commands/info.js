@@ -221,11 +221,17 @@ async function awaitComponent(reply, filter, time = 300_000) {
 	}
 }
 
-async function handleItemCollector(interaction, reply, item, inventory) {
+async function handleItemCollector(interaction, reply, item, _inventory) {
 	const collectorFilter = (i) => i.user.id === interaction.user.id;
 
 	const response = await awaitComponent(reply, collectorFilter);
 	if (!response) return;
+
+	const munId = interaction.user.id;
+	const munData = getTableData("muns").find((row) => row.id === munId);
+
+	const mun = new Mun(munData.name);
+	let inventory = await mun.inventory;
 
 	// ---- USE ----
 	if (response.customId === "info:use") {
