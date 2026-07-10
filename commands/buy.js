@@ -6,19 +6,14 @@ import { getTableData } from "../utility/access_data.js";
 import {
 	TextDisplayBuilder,
 	ContainerBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	ActionRowBuilder,
-	SectionBuilder,
-	ThumbnailBuilder,
 } from "discord.js";
 import {
 	getAllItemNames,
 	Item,
 	Mun,
 } from "../utility/classes.js";
-import { getBuyConfirmContainer, fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed, embedColour, parseEmbedColour } from "../utility/format_embed.js";
+import { fuzzyMatchItems } from "../utility/components.js";
+import { embedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("buy")
@@ -33,6 +28,7 @@ const commandBuilder = new SlashCommandBuilder()
 	.addIntegerOption((option) =>
 		option
 			.setName("quantity")
+			.setMinValue(1)
 			.setDescription("How many do you want to buy? Defaults to 1."),
 	);
 
