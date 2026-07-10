@@ -65,7 +65,7 @@ function getMunIdForCharacter(character) {
 /**
  * Formats a time-remaining string from milliseconds.
  */
-function formatTimeRemaining(ms) {
+export function formatTimeRemaining(ms) {
 	if (ms <= 0) return "now";
 	const hours = Math.floor(ms / (1000 * 60 * 60));
 	const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -227,7 +227,7 @@ async function getDailyFlavor(dailyType, userId) {
 /**
  * Gets the first OC belonging to a mun (player).
  */
-function getFirstOCForMun(munName) {
+export function getFirstOCForMun(munName) {
 	const allOCs = getTableData("ocs");
 	if (!allOCs) return null;
 	const oc = allOCs.find((o) => o.mun === munName);
@@ -468,15 +468,5 @@ export default {
 			return interaction.editReply(payload);
 		};
 		await mainFunction(dailyType, userId, reply);
-	},
-	async executePrefix(message, args) {
-		const dailyType = args?.trim().split(/\s+/)[0]?.toLowerCase();
-		if (!dailyType || !VALID_TYPES.has(dailyType)) {
-			const typeList = [...VALID_TYPES].map(t => `\`${t}\``).join(", ");
-			await message.reply(`Usage: \`?daily <type>\`\nTypes: ${typeList}`);
-			return;
-		}
-		const userId = message.author.id;
-		await mainFunction(dailyType, userId, (payload) => message.reply(payload));
 	},
 };

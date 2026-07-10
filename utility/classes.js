@@ -5,7 +5,8 @@ import {
 	rowValueR1C1ToA1,
 } from "../sheets.js";
 import { addData, getData, getFieldProperties, getTableData, updateData, addInventoryRow, addAwardRow } from "./access_data.js";
-import { randOutOf, resolveOCName } from "./utils.js";
+import { getSeason } from "./dailies.js";
+import { pickOne, randOutOf, resolveOCName } from "./utils.js";
 
 /**
  * Holds data as an array of DataRow objects, in the form {header1: value1, header2: value2, ...}
@@ -408,6 +409,7 @@ export class currentStats extends DBTable {
 		this.error = this.data.error;
 		this.daily = this.data.daily;
 		this.dailyConsequence = this.data.dailyConsequence;
+		this.dailyDrink = this.data.dailyDrink
 	}
 
 	async setStat(statName, newValue) {
@@ -634,6 +636,84 @@ export class Team extends DBTable {
 	}
 }
 
+export class GeneratorEntry extends DBTable {
+	constructor(name) {
+		super('generators', 'name', name)
+		this.name = this.data.name;
+		this.category = this.data.category;
+		this.description = this.data.description;
+		this.entropic = this.data.entropic;
+		this.enabled = this.data.enabled;
+		this.rarity = this.data.rarity;
+		this.seasonal = this.data.seasonal;
+	}
+	get selectOdds() {
+		switch (this.rarity) {
+			case "COMMON":
+				return 5;
+			case "UNCOMMON":
+				return 3;
+			case "RARE":
+				return 1;
+		}
+	}
+}
+
+export class Generator {
+	constructor(category) {
+		this.category = category;
+	}
+
+	static buildGenerator(category) {
+		const allRows = getTableData('generators').filter(table => table.category == category);
+		const newGenerator = new Generator(category);
+		newGenerator.items = allRows;
+		return newGenerator;
+	}
+
+	buildFilteredGenerator(allowSeasonal = false, allowEntropic = false) {
+		return this.filter(
+			(gen) => {
+				if (!allowSeasonal) {
+					return gen.seasonal === "ALL"
+				}
+				const date = new Date();
+				const season = getSeason(date.getMonth());
+				return gen.seasonal.in(["ALL", season]);
+			}
+		).filter(
+			(gen) => allowEntropic || !gen.entropic
+		);
+	}
+
+	selectWithRarity(list) {
+		let totalWeight;
+		list.forEach((entry) => totalWeight += entry.selectOdds);
+
+		var rand = Math.floor(Math.random() * totalWeight + 1);
+		var weight = 0;
+		for (let i = 0; i < list.length; i++) {
+			weight += list[i].selectOdds;
+			if (rand <= weight) {
+				return list[i];
+			}
+		}
+	}
+
+	selectOneFromGenerator(useRarity = true, allowSeasonal = false, allowEntropic = false) {
+		const filter = this.buildFilteredGenerator(allowSeasonal, allowEntropic)
+		return useRarity ? this.selectWithRarity(filter) : pickOne(filter);
+	}
+}
+
+export class WordList extends DBTable {
+	constructor(name) {
+		super('wordLists', 'name', name)
+		this.name = this.data.name;
+		this.words = this.data.words;
+	}
+}
+
 export class Inventory {
 	constructor(mun) {
 		this.mun = mun
@@ -742,7 +822,6 @@ export class Inventory {
 	}
 
 	checkInventory(itemName) {
-
 		const itemNames = this.getAllItemNames();
 		if (itemNames.includes(itemName)) {
 			return true

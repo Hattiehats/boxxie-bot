@@ -2,11 +2,11 @@ import { EmbedBuilder } from "discord.js";
 import { addStandardFormat } from "./format_embed.js";
 import { pickOne } from "./utils.js";
 
-function getSeason(month) {
-	if (month == 11 || month <= 1) return 'winter';
-	if (month > 1 && month <= 4) return 'spring';
-	if (month > 4 && month <= 7) return 'summer';
-	else return 'autumn';
+export function getSeason(month) {
+	if (month == 11 || month <= 1) return 'WINTER';
+	if (month > 1 && month <= 4) return 'SPRING';
+	if (month > 4 && month <= 7) return 'SUMMER';
+	else return 'AUTUMN';
 }
 
 function generateWeatherText(season) {

@@ -24,7 +24,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "Current Stats",
-		range: "A:O"
+		range: "A:P"
 	},
 	{
 		sheet: "Inventory Rows",
@@ -61,7 +61,15 @@ export const SHEET_RANGES = [
 	{
 		sheet: "Teams",
 		range: "A:E"
-	}
+	},
+	{
+		sheet: "Generators",
+		range: "A:G"
+	},
+	{
+		sheet: "Wordlists",
+		range: "A:B"
+	},
 ]
 const shopKeys = [
 	{
@@ -303,6 +311,10 @@ const currentStatKeys = [
 	{
 		db: "dailyConsequence",
 		sheet: "Daily Consequence"
+	},
+	{
+		db: "dailydrink",
+		sheet: "Daily Drink"
 	}
 ]
 const inventoryKeys = [
@@ -531,6 +543,46 @@ const teamKeys = [
 		sheet: "Last Winner"
 	}
 ]
+const generatorKeys = [
+	{
+		db: "name",
+		sheet: "Name"
+	},
+	{
+		db: "category",
+		sheet: "Category"
+	},
+	{
+		db: "description",
+		sheet: "Description"
+	},
+	{
+		db: "entropic",
+		sheet: "Entropic"
+	},
+	{
+		db: "enabled",
+		sheet: "Enabled"
+	},
+	{
+		db: "rarity",
+		sheet: "Rarity"
+	},
+	{
+		db: "seasonal",
+		sheet: "Seasonal"
+	}
+]
+const wordlistKeys = [
+	{
+		db: "name",
+		sheet: "Name"
+	},
+	{
+		db: "words",
+		sheet: "Words"
+	}
+]
 const allKeys = {
 	'All Items': { keys: shopKeys, field: "shop" },
 	'Mun Info': { keys: munKeys, field: "muns" },
@@ -545,7 +597,9 @@ const allKeys = {
 	'Custom Commands': { keys: prefixCommandKeys, field: "prefixCommands" },
 	'All Awards': { keys: awardKeys, field: "awards" },
 	'Award Rows': { keys: awardRowKeys, field: "awardRows" },
-	'Teams': { keys: teamKeys, field: "teams" }
+	'Teams': { keys: teamKeys, field: "teams" },
+	'Generators': { keys: generatorKeys, field: "generators" },
+	'Wordlists': { keys: wordlistKeys, field: "wordLists" }
 }
 
 const dbDefault = {
@@ -563,7 +617,9 @@ const dbDefault = {
 	prefixCommands: [],
 	awards: [],
 	awardRows: [],
-	teams: []
+	teams: [],
+	generators: [],
+	wordLists: [],
 }
 
 const cachePath = './data/cached-data.json';
