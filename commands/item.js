@@ -128,11 +128,18 @@ async function awaitComponent(reply, filter, time = 300_000) {
 	}
 }
 
-async function handleCollector(interaction, reply, item, inventory) {
+async function handleCollector(interaction, reply, item, _inventory) {
 	const collectorFilter = (i) => i.user.id === interaction.user.id;
 
 	const response = await awaitComponent(reply, collectorFilter);
 	if (!response) return;
+
+
+	const munId = interaction.user.id;
+	const munData = getTableData("muns").find((row) => row.id === munId);
+
+	const mun = new Mun(munData.name);
+	let inventory = await mun.inventory;
 
 	// ---- USE ----
 	if (response.customId === "item:use") {
@@ -148,7 +155,7 @@ async function handleCollector(interaction, reply, item, inventory) {
 			});
 		} catch {
 			await response.update({
-				components: simpleComponent("### Sorry! I ran into an error :("),
+				components: simpleComponent("### An error has occured", undefined, false),
 				flags: MessageFlags.IsComponentsV2,
 			});
 		}
@@ -167,7 +174,7 @@ async function handleCollector(interaction, reply, item, inventory) {
 			});
 		} catch {
 			await response.update({
-				components: simpleComponent("### Sorry! I ran into an error :("),
+				components: simpleComponent("### An error has occured", undefined, false),
 				flags: MessageFlags.IsComponentsV2,
 			});
 		}
@@ -208,7 +215,7 @@ async function handleCollector(interaction, reply, item, inventory) {
 
 		if (targetUserId === interaction.user.id) {
 			await userResponse.update({
-				components: simpleComponent("You can't gift an item to yourself! ❌"),
+				components: simpleComponent("You can't gift an item to yourself! ❌", undefined, false),
 				flags: MessageFlags.IsComponentsV2,
 			});
 			return;
@@ -221,6 +228,8 @@ async function handleCollector(interaction, reply, item, inventory) {
 			await userResponse.update({
 				components: simpleComponent(
 					"That user doesn't have a profile! ❌",
+					undefined,
+					false
 				),
 				flags: MessageFlags.IsComponentsV2,
 			});
@@ -246,7 +255,7 @@ async function handleCollector(interaction, reply, item, inventory) {
 			});
 		} catch {
 			await userResponse.update({
-				components: simpleComponent("### Sorry! I ran into an error :("),
+				components: simpleComponent("### An error has occured", undefined, false),
 				flags: MessageFlags.IsComponentsV2,
 			});
 		}
@@ -263,7 +272,7 @@ async function mainFunction(interaction) {
 		item = new Item(itemName);
 	} catch {
 		await interaction.editReply({
-			components: simpleComponent("Item not found! ❌"),
+			components: simpleComponent("Item not found! ❌", undefined, false),
 			flags: MessageFlags.IsComponentsV2,
 		});
 		return;
