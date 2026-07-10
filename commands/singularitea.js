@@ -79,6 +79,7 @@ async function mainFunction(userId, reply) {
 
 	await updateData("currentStats", "name", ocName, "dailyDrink", String(generateMidnightTZ().valueOf()));
 
+
 	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 
 	container.addTextDisplayComponents(

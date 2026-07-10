@@ -677,14 +677,19 @@ export class Generator {
 	}
 
 	selectWithRarity(list) {
-		let totalWeight;
-		list.forEach((entry) => totalWeight += selectOdds(entry.rarity));
+		let totalWeight = 0;
+		list.forEach((entry) => {
+			console.log(`Adding from entry ${entry.name} with rarity ${entry.rarity}`);
+			totalWeight += selectOdds(entry.rarity)
+		})
 
 		var rand = Math.floor(Math.random() * totalWeight + 1);
 		var weight = 0;
+		console.log(`List of ${list.length} items, ${totalWeight} weight`);
 		for (let i = 0; i < list.length; i++) {
 			weight += selectOdds(list[i].rarity);
 			if (rand <= weight) {
+				console.log(`Selecting ${list[i]}`);
 				return list[i];
 			}
 		}
