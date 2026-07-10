@@ -77,7 +77,23 @@ async function mainFunction(userId, reply) {
 	let collectionTable = Generator.buildGenerator("SingulariTEA")
 	let result = collectionTable.selectOneFromGenerator(true, true, true);
 
-	console.log(result);
+	await updateData("currentStats", "name", ocName, "dailyDrink", String(generateMidnightTZ().valueOf()));
+
+	const container = new ContainerBuilder().setAccentColor(embedColour(true));
+
+	container.addTextDisplayComponents(
+		new TextDisplayBuilder().setContent(`## SingulariTEA Special Order for ${ocName}`),
+		new TextDisplayBuilder().setContent(`\`\`\`ini\nThe exhausted barista scans your card and right on time hands to you a [${result.name}]\`\`\``),
+		new TextDisplayBuilder().setContent(`\`\`\`ini\n${result.description}\`\`\``),
+	);
+
+	const replyPayload = {
+		components: [container],
+		flags: MessageFlags.IsComponentsV2,
+	};
+
+	return reply(replyPayload);
+
 }
 
 export default {
