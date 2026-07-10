@@ -647,16 +647,6 @@ export class GeneratorEntry extends DBTable {
 		this.rarity = this.data.rarity;
 		this.seasonal = this.data.seasonal;
 	}
-	get selectOdds() {
-		switch (this.rarity) {
-			case "COMMON":
-				return 5;
-			case "UNCOMMON":
-				return 3;
-			case "RARE":
-				return 1;
-		}
-	}
 }
 
 export class Generator {
@@ -665,21 +655,21 @@ export class Generator {
 	}
 
 	static buildGenerator(category) {
-		const allRows = getTableData('generators').filter(table => table.category == category);
+		const allRows = getTableData('generators').filter((entry) => table.category == category);
 		const newGenerator = new Generator(category);
 		newGenerator.items = allRows;
 		return newGenerator;
 	}
 
 	buildFilteredGenerator(allowSeasonal = false, allowEntropic = false) {
-		return this.filter(
+		return this.items.filter(
 			(gen) => {
 				if (!allowSeasonal) {
 					return gen.seasonal === "ALL"
 				}
 				const date = new Date();
 				const season = getSeason(date.getMonth());
-				return gen.seasonal.in(["ALL", season]);
+				return ["ALL", season].includes(gen.seasonal);
 			}
 		).filter(
 			(gen) => allowEntropic || !gen.entropic
@@ -688,12 +678,12 @@ export class Generator {
 
 	selectWithRarity(list) {
 		let totalWeight;
-		list.forEach((entry) => totalWeight += entry.selectOdds);
+		list.forEach((entry) => totalWeight += selectOdds(entry.rarity));
 
 		var rand = Math.floor(Math.random() * totalWeight + 1);
 		var weight = 0;
 		for (let i = 0; i < list.length; i++) {
-			weight += list[i].selectOdds;
+			weight += selectOdds(list[i].rarity);
 			if (rand <= weight) {
 				return list[i];
 			}
@@ -876,6 +866,21 @@ export function getAllItemNames(shopType) {
 		return available.filter(row => row.shop === shopType).map(row => row.name)
 	}
 
+}
+
+/**
+ * Returns a weighted loot table rarity from an enum of COMMON | UNCOMMON | RARE
+ * @returns {number}
+ */
+export function selectOdds(rarity) {
+	switch (rarity) {
+		case "COMMON":
+			return 5;
+		case "UNCOMMON":
+			return 3;
+		case "RARE":
+			return 1;
+	}
 }
 
 /**
