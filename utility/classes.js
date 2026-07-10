@@ -429,6 +429,7 @@ export class Item extends DBTable {
 		this.buyPrice = sanitizeCurrency(this.data.buyPrice);
 		this.sellPrice = sanitizeCurrency(this.data.sellPrice);
 		this.amount = this.data.amount !== undefined ? parseInt(this.data.amount) : undefined;
+		this.currency = this.data.currency ?? "capital";
 	}
 
 	/**
@@ -637,7 +638,7 @@ export class Inventory {
 		//remove scrip
 		try {
 			if (quantity > 0) {
-				await this.mun.removeScrip(thisItem.buyPrice * quantity);
+				await this.mun.removeScrip(thisItem.buyPrice * quantity, thisItem.currency === "tokens");
 			}
 
 		}

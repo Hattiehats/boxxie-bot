@@ -20,7 +20,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "All Items",
-		range: "A:K"
+		range: "A:N"
 	},
 	{
 		sheet: "Current Stats",
@@ -99,6 +99,10 @@ const shopKeys = [
 	{
 		db: "image",
 		sheet: "Image Link"
+	},
+	{
+		db: "currency",
+		sheet: "Currency"
 	},
 	{
 		db: "amount",
