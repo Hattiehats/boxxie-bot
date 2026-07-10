@@ -57,7 +57,7 @@ async function mainFunction(userId, reply) {
 	if (!errMsg) {
 		availability = checkAvailability(ocName)
 		if (!availability.canUse) {
-			errMsg = reason;
+			errMsg = availability.reason;
 		}
 	}
 
