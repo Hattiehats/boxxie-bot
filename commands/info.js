@@ -55,9 +55,9 @@ function buildItemInfoComponents(item, ownedQty) {
 
 	const priceInfo = [];
 	if (item.buyPrice && !isNaN(item.buyPrice) && item.buyPrice > 0)
-		priceInfo.push(`**Buy Price:** \`${item.buyPrice} capital\``);
+		priceInfo.push(`**Buy Price:** \`${item.buyPrice} ${item.currencyName}\``);
 	if (item.sellPrice && !isNaN(item.sellPrice) && item.sellPrice > 0)
-		priceInfo.push(`**Sell Price:** \`${item.sellPrice} capital\``);
+		priceInfo.push(`**Sell Price:** \`${item.sellPrice} ${item.currencyName}\``);
 
 	const infoTexts = [
 		new TextDisplayBuilder().setContent(`## ${item.name}`),
