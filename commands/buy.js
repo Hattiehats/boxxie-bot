@@ -58,26 +58,23 @@ function getNotPurchasableComponent(itemName) {
 	];
 }
 
-function getScripErrorComponent(mun, amount) {
+function getScripErrorComponent(mun, amount, currency, currencyName) {
 	return [
 		new ContainerBuilder().setAccentColor(embedColour(false)).addTextDisplayComponents(
 			new TextDisplayBuilder()
-				.setContent(`**\`\`\`ERROR: Not enough capital in ${mun.name}'s wallet to pay ${amount}!\`\`\`**
-                                \uD83D\uDCB0 **BALANCE:** \`${mun.capital}\` capital`),
+				.setContent(`**\`\`\`ERROR: Not enough ${currencyName} in ${mun.name}'s wallet to pay ${amount}!\`\`\`**
+                                \uD83D\uDCB0 **BALANCE:** \`${mun[currency]}\` ${currencyName}`),
 		),
 	];
 }
 
-function getPurchasedComponent(itemName, quantity, newBalance) {
-	const message =
-		"## Purchased ([QUANTITY]x) [ITEM_NAME]! \uD83C\uDF89"
-			.replace("[QUANTITY]", quantity)
-			.replace("[ITEM_NAME]", itemName);
+function getPurchasedComponent(itemName, quantity, newBalance, currency) {
+	const message = `## Purchased ${quantity} ${itemName}`;
 	return [
 		new ContainerBuilder()
 			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(message))
-			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance}`)),
+			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance} ${currency}`)),
 	];
 }
 
@@ -105,15 +102,15 @@ async function mainFunction(interaction) {
 
 	try {
 		await (await mun.inventory).buyItem(itemName, quantity);
-		const newBalance = mun.capital;
+		const newBalance = mun[item.currency];
 		await interaction.editReply({
-			components: getPurchasedComponent(itemName, quantity, newBalance),
+			components: getPurchasedComponent(itemName, quantity, newBalance, item.currencyName),
 			flags: MessageFlags.IsComponentsV2,
 		});
 	} catch (error) {
-		if (error.message === "Not enough capital!") {
+		if (error.message.includes("Not enough ")) {
 			await interaction.editReply({
-				components: getScripErrorComponent(mun, quantity),
+				components: getScripErrorComponent(mun, quantity, item.currency, item.currencyName),
 				flags: MessageFlags.IsComponentsV2,
 			});
 		} else {

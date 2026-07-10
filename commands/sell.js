@@ -37,7 +37,7 @@ const errorComponent = [
 	new ContainerBuilder()
 		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
-			new TextDisplayBuilder().setContent("### Sorry! I ran into an error :("),
+			new TextDisplayBuilder().setContent("### An error occured"),
 		),
 ];
 
@@ -59,7 +59,7 @@ function getNotSellableComponent(itemName) {
 	];
 }
 
-function getSellConfirmContainer(itemName, quantity, sellPrice, currentBalance, itemThumb) {
+function getSellConfirmContainer(itemName, quantity, sellPrice, currentBalance, itemThumb, currency) {
 	const totalValue = sellPrice * quantity;
 	const message1 = `Are you sure you want to sell (${quantity}x) **${itemName}** for **${totalValue} Capital**?`;
 	const message2 = `> \uD83D\uDCB0 Your current balance: \`${currentBalance}\``;
@@ -97,13 +97,13 @@ function getSellConfirmContainer(itemName, quantity, sellPrice, currentBalance, 
 	];
 }
 
-function getSoldComponent(itemName, quantity, newBalance) {
+function getSoldComponent(itemName, quantity, newBalance, currencyName) {
 	const message = `## Sold (${quantity}x) ${itemName}! \uD83D\uDCB0`;
 	return [
 		new ContainerBuilder()
 			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(new TextDisplayBuilder().setContent(message))
-			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance}`)),
+			.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# \uD83D\uDCB0 NEW BALANCE: ${newBalance} ${currencyName}`)),
 	];
 }
 
@@ -151,11 +151,12 @@ async function mainFunction(interaction) {
 	try {
 		// Remove item from inventory (negative quantity)
 		await inventory.addItem(itemName, -quantity);
-		// Add scrip
+
 		const sellTotal = item.sellPrice * quantity;
-		await mun.addScrip(sellTotal);
+
+		await mun.addScrip(sellTotal, item.currency === 'tokens');
 		await interaction.editReply({
-			components: getSoldComponent(itemName, quantity, mun.capital),
+			components: getSoldComponent(itemName, quantity, mun[item.currency], item.currencyName),
 			flags: MessageFlags.IsComponentsV2,
 		});
 	} catch {

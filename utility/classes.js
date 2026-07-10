@@ -441,6 +441,18 @@ export class Item extends DBTable {
 		return this.amount !== 0;
 	}
 
+	get currencyName() {
+		let val = "dollaridoos";
+		switch (this.currency) {
+			case 'tokens':
+				val = "Linne Loyalty Tokens";
+				break;
+			case 'capital':
+				val = "Capital";
+				break;
+		}
+		return val;
+	}
 	/**
 	 * Whether buying/obtaining a given quantity is allowed.
 	 * @param {number} quantity

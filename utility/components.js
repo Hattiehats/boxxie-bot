@@ -31,16 +31,12 @@ export function getBuyConfirmContainer(
 	itemPrice,
 	currentBalance,
 	itemThumb,
+	itemCurrency = 'capital'
 ) {
-	let message1 =
-		"Are you sure you want to buy ([QTY]x) **[ITEM_NAME]** for **[PRICE]**?";
-	let message2 = "> 💰Your current capital: `[BALANCE]`";
-
-	message1 = message1
-		.replace("[QTY]", itemQty)
-		.replace("[ITEM_NAME]", itemName)
-		.replace("[PRICE]", `${itemPrice} Capital`);
-	message2 = message2.replace("[BALANCE]", currentBalance);
+	/*let message1 =
+		"Are you sure you want to buy ([QTY]x) **[ITEM_NAME]** for **[PRICE]**?"; */
+	let message1 = `Confirming your purchase of ${itemQty} **${itemName}** for ${itemPrice} ${itemCurrency}`;
+	let message2 = `> 💰Your current ${itemCurrency}: ${currentBalance}`;
 
 	const container = new ContainerBuilder().setAccentColor(embedColour(true));
 	const textComponents = [
@@ -89,6 +85,7 @@ export function getBuyConfirmContainer(
  * @param {string} itemPrice
  * @param {string} itemDesc
  * @param {string} itemThumb
+ * @param {string} itemCurrency
  * @returns {ContainerBuilder[]}
  */
 export function getItemInfoContainer(
@@ -97,13 +94,12 @@ export function getItemInfoContainer(
 	itemDesc,
 	itemThumb,
 	itemType,
+	itemCurrency,
 ) {
-	const message1 = "## [ITEM_NAME]".replace("[ITEM_NAME]", itemName);
-	const message2 = "**Price:** `[ITEM_PRICE] scrip`\n**Type:** `[ITEM_TYPE]`".replace(
-		"[ITEM_PRICE]",
-		itemPrice,
-	).replace('[ITEM_TYPE]', itemType);
-	const message3 = "> [ITEM_DESC]".replace("[ITEM_DESC]", itemDesc);
+
+	const message1 = `## ${itemName}`;
+	const message2 = `** Price:** \`${itemPrice} ${itemCurrency}\`\n**Type:** \`${itemType}\``;
+	const message3 = `> ${itemDesc}`;
 
 	const shopButtons = new ActionRowBuilder().addComponents(
 		new ButtonBuilder()
