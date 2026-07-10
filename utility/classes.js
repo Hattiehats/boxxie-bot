@@ -655,7 +655,7 @@ export class Generator {
 	}
 
 	static buildGenerator(category) {
-		const allRows = getTableData('generators').filter((entry) => table.category == category);
+		const allRows = getTableData('generators').filter((entry) => entry.category == category);
 		const newGenerator = new Generator(category);
 		newGenerator.items = allRows;
 		return newGenerator;

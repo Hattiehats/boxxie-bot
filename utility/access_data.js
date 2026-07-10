@@ -313,7 +313,7 @@ const currentStatKeys = [
 		sheet: "Daily Consequence"
 	},
 	{
-		db: "dailydrink",
+		db: "dailyDrink",
 		sheet: "Daily Drink"
 	}
 ]
