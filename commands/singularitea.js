@@ -84,7 +84,8 @@ async function mainFunction(userId, reply) {
 
 	container.addTextDisplayComponents(
 		new TextDisplayBuilder().setContent(`## SingulariTEA Special Order for ${ocName}`),
-		new TextDisplayBuilder().setContent(`\`\`\`ini\nThe exhausted barista scans your card and right on time hands to you a [${result.name}].\n${result.description}\`\`\``),
+		new TextDisplayBuilder().setContent(`\`\`\`ini\nThe exhausted barista scans your card and, after some effort, hands to you a [${result.name}]!\`\`\``),
+		new TextDisplayBuilder().setContent(`\`\`\`ini\n${result.description}\`\`\``),
 	);
 
 	const replyPayload = {
