@@ -947,14 +947,12 @@ let syncTimer = null;
 let nextSyncAt = null;
 
 export function generateMidnightTZ(days_increment = 1) {
-	const now = new DateTime().now().setZone(process.env.TZ ?? 'America/New_York');
+	const now = DateTime.now().setZone(process.env.DAILY_TZ ?? 'America/New_York');
 	return now.plus({ days: days_increment }).startOf('day').toJSDate();
 }
 
 export function getTimeUntilTimestamp(target) {
-	const now = new Date();
-	const then = new Date(target);
-	return then.getTime() - now.getDate();
+	return target - Date.now();
 }
 /** Returns ms until the next midnight in America/New_York (EST/EDT). */
 function msUntilMidnightEST() {
