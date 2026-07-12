@@ -28,7 +28,7 @@ function checkAvailability(ocName) {
 		if (remaining > 0) {
 			return {
 				canUse: false,
-				reason: `The company pass makes an angry noise. Try again in **${formatTimeRemaining(remaining)}**`
+				reason: `The company pass reader makes an angry noise. Try again in **${formatTimeRemaining(remaining)}**`
 			};
 		}
 	}
@@ -85,9 +85,13 @@ async function mainFunction(userId, reply) {
 	container.addTextDisplayComponents(
 		new TextDisplayBuilder().setContent(`## SingulariTEA Special Order for ${ocName}`),
 		new TextDisplayBuilder().setContent(`\`\`\`ini\nThe exhausted barista scans your card and, after some effort, hands to you a [${result.name}]!\`\`\``),
-		new TextDisplayBuilder().setContent(`\`\`\`ini\n${result.description}\`\`\``),
 	);
 
+	if (result.description) {
+		container.addTextDisplayComponents(
+			new TextDisplayBuilder().setContent(`\`\`\`ini\n${result.description}\`\`\``),
+		);
+	}
 	const replyPayload = {
 		components: [container],
 		flags: MessageFlags.IsComponentsV2,
