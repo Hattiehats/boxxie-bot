@@ -6,14 +6,14 @@ import {
 	SeparatorBuilder,
 	SeparatorSpacingSize,
 } from "discord.js";
-import { getTableData, getData, updateData, getTimeUntilNextSync, generateMidnightTZ, getTimeUntilTimestamp } from "../utility/access_data.js";
+import { getTableData, getData, updateData, generateMidnightTZ, getTimeUntilTimestamp } from "../utility/access_data.js";
 import {
 	Mun,
 	Character,
 	currentStats,
 	getGachaItems,
 } from "../utility/classes.js";
-import { embedColour, parseEmbedColour } from "../utility/format_embed.js"
+import { embedColour } from "../utility/format_embed.js"
 import {
 	getCustomCommandContent,
 	customCommandExists,
@@ -91,7 +91,7 @@ function checkDailyAvailability(ocName) {
 		if (remaining > 0) {
 			return {
 				canUse: false,
-				reason: `You're too exhausted to work today. Try again in **${formatTimeRemaining(remaining)}** and get some rest!`,
+				reason: `You're exhausted and in no condition to work a proper day. Try again in **${formatTimeRemaining(remaining)}** and get some rest!`,
 			};
 		}
 	}
@@ -113,13 +113,13 @@ function checkDailyAvailability(ocName) {
 // ─── Daily reward calculators ───
 
 function rollWork() {
-	return { amount: 5, description: "You put in an honest day's work." };
+	return { amount: 5, description: "Another day, another **5** capital." };
 }
 
 function rollHustle() {
 	// 2 to 10, EV = 6
 	const amount = Math.floor(Math.random() * 9) + 2;
-	return { amount, description: `You hustled and made **${amount}** capital.` };
+	return { amount, description: `You got **${amount}** capital for the extra work.` };
 }
 
 function rollSteal() {
@@ -161,8 +161,8 @@ function rollSuckup() {
 	// 50% → 0, 50% → 12. EV = 6
 	const success = Math.random() < 0.5;
 	return success
-		? { amount: 12, description: "The boss loved it! Bonus: **12** capital." }
-		: { amount: 0, description: "The boss saw right through you. **0** capital today." };
+		? { amount: 12, description: "It paid off. **12** Capital for the effort." }
+		: { amount: 0, description: "No dice, sadly. **0** Capital, despite your extra effort." };
 }
 
 function rollSabotage() {
@@ -170,8 +170,8 @@ function rollSabotage() {
 	const amount = Math.floor(Math.random() * 21) - 5;
 	return {
 		amount, description: amount >= 0
-			? `You got paid **${amount}** capital by a rival department.`
-			: `You got caught! You paid **${Math.abs(amount)}** capital in damages.`
+			? `You were paid **${amount}** capital for your scheme. Tell no one of your windfall.`
+			: `You ended up **${Math.abs(amount)}** capital out of pocket.`
 	};
 }
 
@@ -182,8 +182,8 @@ function rollOvertime() {
 		amount: 8,
 		exhausted,
 		description: exhausted
-			? "You made **8** capital but passed out at your desk. You'll be too exhausted to work tomorrow."
-			: "You put in the extra hours and earned **8** capital.",
+			? "You made **8** capital, but you're gonna be feeling it in the morning. Tomorrow is not looking too good."
+			: "You put in the extra mile and earned **8** capital. Not bad!",
 	};
 }
 
@@ -195,7 +195,7 @@ function rollCooperate() {
 			amount: 15,
 			partnerAmount: 15,
 			jackpot: true,
-			description: "The synergy actually hits! You both get **15** capital!",
+			description: "You both get **15** capital. Splendid teamwork!",
 		};
 	}
 	// Normal: player gets -3 to +5, partner gets 10-15
@@ -206,8 +206,8 @@ function rollCooperate() {
 		partnerAmount,
 		jackpot: false,
 		description: amount >= 0
-			? `You helped out and earned **${amount}** capital for yourself.`
-			: `You lost **${Math.abs(amount)}** capital covering for them, but they made bank.`,
+			? `The teamwork pays off, and you take **${amount}** capital for yourself.`
+			: `You may have had to invest **${Math.abs(amount)}** capital into the effort, but it paid off for one of you. Just not, y'know, _you_ you.`,
 	};
 }
 
