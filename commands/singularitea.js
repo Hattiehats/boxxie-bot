@@ -79,9 +79,13 @@ async function mainFunction(userId, reply) {
 
 	await updateData("currentStats", "name", ocName, "dailyDrink", String(generateMidnightTZ().valueOf()));
 
-	if (!result.name) {
-		result.name = "A completely unknown substance";
-		result.description = "This shouldn't be here. Not in the office. Not on this plane. When your mind returns from another realm, report this to the Intern's supervisor.";
+	let errorDrink = {
+		name: "A completely unknown substance",
+		description: "This shouldn't be here. Not in the office. Not on this plane. When your mind returns from another realm, report this to the Intern's supervisor.",
+	}
+
+	if (!result || !result.name) {
+		result = errorDrink;
 	}
 
 	const container = new ContainerBuilder().setAccentColor(embedColour(true));
