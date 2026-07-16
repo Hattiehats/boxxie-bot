@@ -50,8 +50,9 @@ const divider = {
 }
 
 
-export function generateDaily() {
-	const header = "# :IRIS: GOOD MORNING, PROXIES!";
+export async function generateDaily(channel) {
+	const iris = channel ? channel.guild.emojis.cache.get(process.env.IRIS_ID) : ""
+	const header = `# ${iris ?? ""} GOOD MORNING, PROXIES!`;
 	const subheader = "-# ⸻ It's another lovely Linne Co. day.";
 
 	const weather = generateWeatherText();
@@ -64,6 +65,7 @@ export function generateDaily() {
 
 	let message = `${header}
 ${subheader}
+
 :white_sun_small_cloud: **${weather.entropic ? "ENTROPIC WEATHER EVENT" : "TODAY'S WEATHER"}**: ${weather.name} 
 > *${weather.description}*
 

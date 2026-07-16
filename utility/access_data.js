@@ -1195,7 +1195,7 @@ export async function periodicSync(client) {
 				const channel = await client.channels.fetch(CUBICLES_CHANNEL_ID).catch(() => null);
 				if (channel) {
 					//await channel.send({ embeds: [generateDaily()] });
-					await channel.send({ content: generateDaily() });
+					await channel.send({ content: await generateDaily(channel) });
 					console.log('[Sync] Sent daily refresh embed to cubicles channel.');
 				} else {
 					console.error(`[Sync] Could not find cubicles channel ${CUBICLES_CHANNEL_ID}`);
