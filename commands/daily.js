@@ -43,7 +43,7 @@ const commandBuilder = new SlashCommandBuilder()
  * Picks a random OC from the full roster, returns a Character object.
  * Excludes OCs belonging to the given mun so you can't target yourself.
  */
-function getRandomOC(excludeMun) {
+export function getRandomOC(excludeMun) {
 	const allOCs = getTableData("ocs");
 	if (!allOCs || allOCs.length === 0) return null;
 	let candidates = allOCs.filter((o) => o.name !== "Test Character");

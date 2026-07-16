@@ -1,6 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import { addStandardFormat } from "./format_embed.js";
 import { pickOne } from "./utils.js";
+import { Generator } from "./classes.js";
+import { getRandomOC } from "../commands/daily.js";
 
 export function getSeason(month) {
 	if (month == 11 || month <= 1) return 'WINTER';
@@ -9,40 +11,37 @@ export function getSeason(month) {
 	else return 'AUTUMN';
 }
 
-function generateWeatherText(season) {
-	const commonWeather = [
-		{ header: "DRIZZLE", text: "The sky proves only to tease, with a smattering of rain to ruin the perfectly good day." },
-		{ header: "SUNNY", text: "The sun shines down on the streets of New York." },
-		{ header: "CLOUDY", text: "The sun shies away today!" },
-		{ header: "UNEXPECTED DOWNPOUR", text: "I hope you brought your umbrella, and left extra time in your commute!" }
-	];
-	let answer;
-	switch (season) {
-		case "winter":
-			answer = [
-				...commonWeather
-			];
-			break;
-		case "spring":
-			answer = [
-				...commonWeather
-			];
-			break;
-		case "autumn":
-			answer = [
-				...commonWeather
-			];
-			break;
-		case "summer":
-			answer = [
-				...commonWeather
-			];
-			break;
-		default:
-			answer = commonWeather;
-	}
+function generateWeatherText() {
+	const collectionTable = Generator.buildGenerator("Weather");
+	let result = collectionTable.selectOneFromGenerator(true, true, true);
 
-	return pickOne(answer);
+	const errorWeather = {
+		name: "Void Nightmare",
+		entropic: true,
+		description: "Uh. Don't look up. Maybe check on the Intern."
+	};
+
+	if (!result || !result.name) {
+		result = errorWeather;
+	}
+	return result;
+}
+
+function generateEmployment(disciplinary) {
+	const errorMessage = {
+		name: "UNKNOWABLE INCIDENT",
+		description: "[REDACTED]",
+		entropic: true,
+	};
+
+	const collection = Generator.buildGenerator(disciplinary ? "Disciplinary" : "EOTD")
+	let result = collection.selectOneFromGenerator(true, true, true);
+
+	if (!result || !result.name) {
+		result = errorWeather;
+	}
+	return result;
+
 }
 
 const divider = {
@@ -50,38 +49,32 @@ const divider = {
 	value: ""
 }
 
-function generateDailyWeatherComponent() {
-	const date = new Date();
-	const season = getSeason(date.getMonth());
-
-	const weatherStruct = generateWeatherText(season);
-
-	return {
-		name: "**━Weather Report━**",
-		value: `**[${weatherStruct.header}]** \n _${weatherStruct.text}_`
-	};
-}
-
-function generateEmployeeComponent() {
-
-	// TODO EMPLOYEE CALLOUTS 
-
-}
-
-function generateRandomEventComponent() {
-
-	// TODO RANDOM EVENTS
-}
 
 export function generateDaily() {
-	const embed = new EmbedBuilder()
-		.setTitle("Good Morning, Proxies!")
-		.setDescription("_It's a beautiful day to work at Linne Co!_")
-		.addFields(divider)
-		.addFields(generateDailyWeatherComponent())
+	const header = "# :IRIS: GOOD MORNING, PROXIES!";
+	const subheader = "-# ⸻ It's another lovely Linne Co. day.";
 
+	const weather = generateWeatherText();
 
+	const eotdChar = getRandomOC()
+	const daChar = getRandomOC(eotdChar.name)
 
+	const eotd = generateEmployment(false)
+	const disciplinary = generateEmployment(true)
+
+	let message = `${header}
+${subheader}
+:white_sun_small_cloud: **${weather.entropic ? "ENTROPIC WEATHER EVENT" : "TODAY'S WEATHER"}**: ${weather.name} 
+> *${weather.description}*
+
+:chart_with_upwards_trend: **EMPLOYEE OF THE DAY**: ${eotdChar.name}, for ${eotd.name}.
+> *${eotd.description}*
+
+:chart_with_downwards_trend: **DISCIPLINARY ACTION**: ${daChar.name}, for ${disciplinary.name}.
+> *${disciplinary.description}*
+`;
+
+	/*
 	if (Math.random() <= 0.4) {
 		// Select an employee
 		// .addFields(generateEmployeeComponent())
@@ -93,6 +86,8 @@ export function generateDaily() {
 		// .addFields(generateRandomEventComponent()
 		console.log("This should generate a random event");
 	}
+	*/
 
-	return addStandardFormat(embed);
+	//return addStandardFormat(embed);
+	return message
 }
