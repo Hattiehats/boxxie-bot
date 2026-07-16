@@ -24,6 +24,7 @@ function generateWeatherText() {
 	if (!result || !result.name) {
 		result = errorWeather;
 	}
+
 	return result;
 }
 
@@ -38,17 +39,11 @@ function generateEmployment(disciplinary) {
 	let result = collection.selectOneFromGenerator(true, true, true);
 
 	if (!result || !result.name) {
-		result = errorWeather;
+		result = errorMessage;
 	}
+
 	return result;
-
 }
-
-const divider = {
-	name: "━━━━━━━━━━━━━━",
-	value: ""
-}
-
 
 export async function generateDaily(channel) {
 	const iris = channel ? channel.guild.emojis.cache.get(process.env.IRIS_ID) : ""
@@ -66,14 +61,14 @@ export async function generateDaily(channel) {
 	let message = `${header}
 ${subheader}
 
-:white_sun_small_cloud: **${weather.entropic ? "ENTROPIC WEATHER EVENT" : "TODAY'S WEATHER"}**: ${weather.name} 
-> *${weather.description}*
+:white_sun_small_cloud: **${weather.entropic ? "ENTROPIC WEATHER EVENT" : "TODAY'S WEATHER"}**: ${weather.name.trim()} 
+> *${weather.description.trim()}*
 
-:chart_with_upwards_trend: **EMPLOYEE OF THE DAY**: ${eotdChar.name}, for ${eotd.name}.
-> *${eotd.description}*
+:chart_with_upwards_trend: **EMPLOYEE OF THE DAY**: ${eotdChar.name.trim()}, for ${eotd.name.trim()}.
+> *${eotd.description.trim()}*
 
-:chart_with_downwards_trend: **DISCIPLINARY ACTION**: ${daChar.name}, for ${disciplinary.name}.
-> *${disciplinary.description}*
+:chart_with_downwards_trend: **DISCIPLINARY ACTION**: ${daChar.name.trim()}, for ${disciplinary.name.trim()}.
+> *${disciplinary.description.trim()}*
 `;
 
 	/*
