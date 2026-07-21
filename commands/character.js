@@ -48,9 +48,9 @@ function createProfileEmbed(OC) {
 				inline: true
 			},
 			{
-				name: "`CONSULTANCY STATUS:`",
+				name: "`CONSULTANCY:`",
 				value: `${OC.consultant}`,
-				inline: false
+				inline: true 
 			},
 			{
 				name: "",

@@ -84,7 +84,7 @@ async function mainFunction(interaction) {
   });
 }
 
-export default {
+/*export default {
   data: commandBuilder,
   async execute(interaction) {
     await mainFunction(interaction);
@@ -128,4 +128,4 @@ export default {
       `${award.emoji || "🏆"} **${award.name}** given to **${munData.name}**!`,
     );
   },
-};
+};*/

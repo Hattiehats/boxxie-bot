@@ -19,11 +19,11 @@ import { basicEmbed, embedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("info")
-	.setDescription("Look at an item or award's details!")
+	.setDescription("Look at an item details!")
 	.addStringOption((option) =>
 		option
 			.setName("name")
-			.setDescription("The item or award to look at")
+			.setDescription("The item to look at")
 			.setRequired(true)
 			.setAutocomplete(true),
 	);
@@ -38,13 +38,14 @@ function resolveEntry(name) {
 	} catch {
 		// not an item
 	}
-	// Try award
+	/* Try award
 	try {
 		const award = new Award(name);
 		return { kind: "award", entry: award };
 	} catch {
 		// not an award either
 	}
+	*/
 	return null;
 }
 
@@ -370,7 +371,7 @@ async function mainFunction(interaction) {
 
 	if (!resolved) {
 		await interaction.editReply({
-			components: simpleComponent("Item or award not found! ❌", undefined, false),
+			components: simpleComponent("Item not found! ❌", undefined, false),
 			flags: MessageFlags.IsComponentsV2,
 		});
 		return;

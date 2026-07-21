@@ -407,7 +407,7 @@ async function mainFunction(dailyType, userId, reply) {
 
 	// Replace [OC] placeholder in flavor text with the target character name
 	if (flavorText && targetOC) {
-		flavorText = flavorText.replaceAll("[OC]", targetOC.name);
+		flavorText = flavorText.replaceAll("$CHARNAME", targetOC.name);
 	}
 
 	// Combine flavor text + PvP text + result
