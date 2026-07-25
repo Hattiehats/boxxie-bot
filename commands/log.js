@@ -28,9 +28,20 @@ const commandBuilder = new SlashCommandBuilder()
 	.setDescription('Submit art, writing, or other work for Capital or LLT')
 	.addStringOption((option) =>
 		option.setName('submission')
-			.setDescription('e.g. "fullrendered 3 bg, words 1000, commission 2"')
+			.setDescription("What you're submitting")
 			.setRequired(true)
 			.setAutocomplete(true)
+	)
+	.addStringOption((option) =>
+		option.setName('multiplier')
+			.setDescription("Multiplier, if anything")
+			.setRequired(false)
+			.setAutocomplete(true)
+	)
+	.addIntegerOption((option) =>
+		option.setName('count')
+			.setDescription("How many pieces, or total word count. Defaults to 1.")
+			.setRequired(false)
 	)
 	.addUserOption(option =>
 		option.setName('user')
@@ -42,6 +53,24 @@ function parseRate(rateStr) {
 	return parseFloat(String(rateStr).replace(/[^0-9.\-]/g, ''));
 }
 
+function parseSub(stype, multiplier, count) {
+	const mechanics = getTableData('mechanics');
+
+	const obj = mechanics.find(m => m.category === 'submission' && m.type === stype)
+	const multi = multiplier ? mechanics.find(m => m.category === 'multiplier' && m.type === multiplier).rate : 1;
+	const count = count ?? 1;
+
+	const basePayout = obj.rate * multi;
+
+	return {
+		type: stype,
+		quantity: count,
+		rate: obj.rate,
+		modifiers: [multiplier],
+		totalPayout: basePayout
+	}
+
+}
 /**
  * Parse a full submission string into entries with calculated payouts.
  * Format: "type [quantity] [multipliers], type [quantity] [multipliers], ..."
@@ -123,37 +152,25 @@ function parseSubmission(submissionStr) {
 }
 
 /** Format a human-readable breakdown of the submission */
-function formatBreakdown(entries, totalPayout) {
+function formatBreakdown(entry) {
 	const lines = [];
-	for (const entry of entries) {
-		let label = `${entry.type} × ${entry.quantity}`;
-		if (entry.modifiers.length > 0) {
-			const modNames = entry.modifiers.map(m => {
-				if (m.includes('NPC')) return 'NPC';
-				if (m.includes('BG')) return 'BG';
-				return m;
-			});
-			label += ` (${modNames.join(', ')})`;
-		}
-		lines.push(`${label} = ${entry.totalPayout.toLocaleString()} Capital`);
+	let label = `${entry.type} × ${entry.quantity}`;
+	if (entry.modifiers.length > 0) {
+		const modNames = [];
+		entry.modifiers.map(m => {
+			if (m.includes('NPC')) modNames.push('NPC');
+			if (m.includes('BG')) modNames.push('BG');
+		});
+		label += ` (${modNames.join(', ')})`;
 	}
-	if (entries.length > 1) {
-		lines.push('───────────────────────');
-		lines.push(`TOTAL = ${totalPayout.toLocaleString()} Capital`);
-	}
+	lines.push(`${label} = ${entry.totalPayout.toLocaleString()} Capital`);
+
 	return lines.join('\n');
 }
 
-async function mainFunction(replyTarget, submissionStr, targetUser) {
-	const result = parseSubmission(submissionStr);
-	if (result.error) {
-		const errEmbed = basicEmbed('', result.error, '', '', '', false);
-		errEmbed.setColor(embedColour(false));
-		await replyTarget.reply({ embeds: [errEmbed], ephemeral: true });
-		return;
-	}
+async function mainFunction(replyTarget, submissionStr, multiplierStr, count, targetUser) {
+	const result = parseSub(submissionStr, multiplierStr, count);
 
-	const { entries, totalPayout } = result;
 
 	const allMuns = getTableData('muns');
 	const munData = allMuns.find(row => row.id === targetUser.id);
@@ -163,10 +180,10 @@ async function mainFunction(replyTarget, submissionStr, targetUser) {
 	}
 
 	const thisMun = new Mun(munData.name);
-	await thisMun.addScrip(totalPayout);
-	await thisMun.addTeamPoints(totalPayout);
+	await thisMun.addScrip(result.totalPayout);
+	await thisMun.addTeamPoints(result.totalPayout);
 
-	const breakdown = formatBreakdown(entries, totalPayout);
+	const breakdown = formatBreakdown(result);
 	const message =
 		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} Capital to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
@@ -180,12 +197,15 @@ export default {
 	data: commandBuilder,
 	async execute(interaction) {
 		const submissionStr = interaction.options.getString('submission');
+		const multiplier = interaction.options.getString('multiplier');
+		const count = interaction.options.getInteger('count') ?? 1;
 		const targetUser = interaction.options.getUser('user') || interaction.user;
-		await mainFunction(interaction, submissionStr, targetUser);
+		await mainFunction(interaction, submissionStr, multiplier, count, targetUser);
 	},
 	async autocomplete(interaction) {
 		const focusValue = interaction.options.getFocused(true);
-		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type')
+		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type', 'category', focusValue);
+
 		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
 	}
 }

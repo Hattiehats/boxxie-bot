@@ -2,9 +2,9 @@ import { getTableData } from './access_data.js';
 
 // Role IDs that grant admin/mod privileges
 export const ADMIN_ROLE_IDS = [
-  '1507956952221749369',
-  '1515715187708137666',
-  '1515715563937202226'
+	'1507956952221749369',
+	'1515715187708137666',
+	'1515715563937202226'
 ];
 
 export const randomActivities = [
@@ -104,9 +104,12 @@ export function resolveOCName(input) {
 }
 
 // As below, but fuzzier, and can support multiple tables
-export function fuzzyMatchOnTable(query, limit = 25, table, field) {
-	const allmatches = getTableData(table.toLowerCase());
+export function fuzzyMatchOnTable(query, limit = 25, table, field, subfield, subfieldquery) {
+	let allmatches = getTableData(table.toLowerCase());
 	if (!allmatches || !Array.isArray(allmatches)) return [];
+
+	if (subfield && subfieldquery)
+		allmatches = allmatches.filter((obj) => obj[subfield] === subfieldquery);
 	if (!query) return allmatches.slice(0, limit).map(match => match[field]);
 
 	const lower = query.toLowerCase();
