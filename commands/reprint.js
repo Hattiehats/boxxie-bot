@@ -4,6 +4,7 @@ import { Character, getFlavorText } from '../utility/classes.js';
 import { getTableData } from '../utility/access_data.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
 import { embedColour, basicEmbed } from '../utility/format_embed.js';
+import { getCustomCommandContent } from '../utility/custom_commands.js';
 // import { AB_DATA } from '../initialize-data.js';
 
 // let compMessage = AB_DATA.getFlavorText("Reprint_Warning");
@@ -12,6 +13,8 @@ import { embedColour, basicEmbed } from '../utility/format_embed.js';
 // let ocName;
 
 // await AB_DATA.pullData();
+
+const RECON_ERR = 'recon_error';
 
 const cancelComponent = [
 	new ContainerBuilder()
@@ -67,13 +70,49 @@ function setComponent(ocName) {
 	return components;
 }
 
+async function getReconError() {
+	if (!customCommandExists(RECON_ERR)) return null;
+	const result = await getCustomCommandContent(RECON_ERR);
+	return result || null;
+}
+
+const DEFAULT_ERROR_TABLE = `[**METANARRATIVE DISSONANCE**]: Overcome with dizziness and agonizing head pain, collapsing to the floor of the reconstruction chamber, you suddenly realise this body belongs to one of your parallel selves. The reality of your multiversal body snatching only has a moment to set in as the pain of being alive again pulls the thought away like a bad dream.`;
+
+async function createReconPreamble(ocName) {
+
+	const preamble = `\`\`\`ini
+As the door of the reconstruction pod rumbles open and the light hits your eyes, something feels wrong - *you* feel [WRONG]. 
+
+Something [TERRIBLE?] [WONDERFUL?] has happened.
+
+${ocName} has experienced an [ECTOPIC EXPRESSION]. Please either roll a [d10] to choose randomly from the list below, or select whichever one you like. This will affect you until your next reconstruction.\`\`\``;
+	return new ContainerBuilder()
+		.setAccentColor(embedColour(false))
+		.addTextDisplayComponents(
+			new TextDisplayBuilder().setContent(preamble)
+		);
+}
+
+function createReconPostLude() {
+	return new ContainerBuilder()
+		.setAccentColor(embedColour(false))
+		.addTextDisplayComponents(
+			new TextDisplayBuilder().setContent(
+				`\`\`\`ini
+You should check in with [DR. FUCHES] if you can, then head to [HR]… you have paperwork to sign.
+				\`\`\``
+			)
+		)
+}
+
+
 async function reprintMessage(interaction) {
 	await interaction.deferReply();
 	let error = false;
 	const ocName = interaction.options.getString("oc");
 
 	const reprintContent = `### ${ocName} has been cleanly reconstructed. Please resume your duties.`;
-	const errorContent = `\`\`\`ini\nWhile reconstructing ${ocName}, an [ENTOPIC EXPRESSION] has occurred. You may decide the error for yourself, or you may roll 1d10 to pick an error from this table. Effects may be flavored however you like.\`\`\`\n**You come back from the recon process...**\n> \`1.)\` - With a different hair and/or eye color.\n> \`2.)\` - 1d6 inches shorter.\n> \`3.)\` - 1d6 inches taller.\n> \`4.)\` - Differently colored blood.\n> \`5.)\` - With impaired functioning in part of their body.\n> \`6.)\` - With a seemingly permanent illness they didn't have before. \n> \`7.)\` - With sudden chronic pain.\n> \`8.)\` - With personality change. (Less irritable, etc.)\n> \`9.)\` - With a gap in their memory.\n> \`10.)\` - Missing part of their body.\`\`\`This error will impact you until your next recon.\`\`\``;
+	const errorContent = getReconError() ?? DEFAULT_ERROR_TABLE;
 	const reprintConfirmMessage = [
 		new ContainerBuilder()
 			.setAccentColor(embedColour(true))
@@ -83,11 +122,14 @@ async function reprintMessage(interaction) {
 	];
 
 	const errorMessage = [
+		await createReconPreamble(ocName),
 		new ContainerBuilder()
-			.setAccentColor(embedColour(false))
+			.setAccentColor(embedColour(true))
 			.addTextDisplayComponents(
 				new TextDisplayBuilder().setContent(errorContent),
-			)
+			),
+
+		createReconPostLude()
 	];
 	try {
 
