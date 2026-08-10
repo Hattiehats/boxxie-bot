@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 import { getTableData, getData, updateData, addInventoryRow, writeCache } from './access_data.js';
 import { parseComponents } from './custom_command_components.js';
 
-const PREFIX = '?';
+export const PREFIX = '!';
 
 /**
  * Parses a money value that may be a range (e.g. "100-500") or a flat number.
@@ -47,9 +47,12 @@ function parseItemField(field) {
  */
 export async function handlePrefixCommand(message) {
     const content = message.content.trim();
+    
     if (!content.startsWith(PREFIX)) return false;
 
+
     const commandName = content.slice(PREFIX.length).trim().toLowerCase();
+   
     if (!commandName) return false;
     if (commandName === 'boxxiemood') return false;
 
@@ -516,8 +519,8 @@ async function giveMoney(message, amount) {
         const mun = getData('muns', 'id', message.author.id);
         if (!mun) return;
 
-        const currentScrip = parseInt(mun.scrip) || 0;
-        await updateData('muns', 'id', message.author.id, 'scrip', String(currentScrip + numAmount));
+        const currentScrip = parseInt(mun.capital) || 0;
+        await updateData('muns', 'id', message.author.id, 'capital', String(currentScrip + numAmount));
     } catch (e) {
         console.error('Error giving money from custom command:', e);
     }

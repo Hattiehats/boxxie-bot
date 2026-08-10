@@ -32,7 +32,7 @@ const commandBuilder = new SlashCommandBuilder()
 			.setRequired(true)
 			.addChoices(
 				{ name: "Work — Safe 5 capital", value: "work" },
-				{ name: "Grind — 2-10 capital", value: "grind" },
+				{ name: "Hustle — 2-10 capital", value: "hustle" },
 				{ name: "Appease — Coin flip", value: "appease" },
 				{ name: "Scheme — -5 to +15 capital (flavor from another OC)", value: "scheme" },
 				{ name: "Team Up — You get -3 to +5 capital, another OC gets +10 to +15", value: "teamup" },
@@ -234,7 +234,7 @@ export function getFirstOCForMun(munName) {
 	return oc ? oc.name : null;
 }
 
-const VALID_TYPES = new Set(["work", "grind", "appease", "scheme", "teamup"]);
+const VALID_TYPES = new Set(["work", "hustle", "appease", "scheme", "teamup"]);
 
 async function mainFunction(dailyType, userId, reply) {
 	// Find the player's mun
@@ -294,7 +294,7 @@ async function mainFunction(dailyType, userId, reply) {
 		case "work":
 			result = rollWork();
 			break;
-		case "grind":
+		case "hustle":
 			result = rollHustle();
 			break;
 		case "appease":

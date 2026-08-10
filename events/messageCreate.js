@@ -1,6 +1,6 @@
 import { Events } from 'discord.js';
 import { getTableData } from '../utility/access_data.js';
-import { handlePrefixCommand, getCommandList } from '../utility/custom_commands.js';
+import { PREFIX, handlePrefixCommand, getCommandList } from '../utility/custom_commands.js';
 import { basicEmbed } from '../utility/format_embed.js';
 import { activeRuns, persistActiveRuns } from '../utility/sublevel_handler.js';
 
@@ -24,7 +24,7 @@ export default {
 		if (message.author.bot) return;
 
 		const content = message.content.trim();
-		if (!content.startsWith('?')) return;
+		if (!content.startsWith(PREFIX)) return;
 
 		const cmdName = content.slice(1).trim().split(/\s+/)[0]?.toLowerCase();
 		if (!cmdName) return;

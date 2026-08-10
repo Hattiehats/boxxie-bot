@@ -108,8 +108,10 @@ export function fuzzyMatchOnTable(query, limit = 25, table, field, subfield, sub
 	let allmatches = getTableData(table.toLowerCase());
 	if (!allmatches || !Array.isArray(allmatches)) return [];
 
-	if (subfield && subfieldquery)
+	if (subfield && subfieldquery) {
+		console.log(`Subfield: ${subfield}, query: ${subfieldquery}`);
 		allmatches = allmatches.filter((obj) => obj[subfield] === subfieldquery);
+	}
 	if (!query) return allmatches.slice(0, limit).map(match => match[field]);
 
 	const lower = query.toLowerCase();

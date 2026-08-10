@@ -40,7 +40,7 @@ const commandBuilder = new SlashCommandBuilder()
 async function changeWallet(interaction, amount, mun, currency) {
 
 	let actionMessage;
-	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
+	const thumbnail = 'https://i.imgur.com/GKR448L.jpeg';
 	let result;
 	try {
 		result = await mun.removeScrip(amount, currency === "tokens")
@@ -50,7 +50,7 @@ async function changeWallet(interaction, amount, mun, currency) {
 	catch (error) {
 		if (error.message === `Not enough ${currency}!`) {
 			actionMessage =
-				`**\`\`\`ERROR: Not enough ${currency} ip in ${mun.name}'s wallet, cannot remove ${amount}!\`\`\`**
+				`**\`\`\`ERROR: Not enough ${currency} in ${mun.name}'s wallet, cannot remove ${amount}!\`\`\`**
             💰 **BALANCE:** \`${mun[currency]}\` ${currency}`;
 		}
 		else {

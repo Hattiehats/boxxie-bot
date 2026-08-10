@@ -53,12 +53,12 @@ function parseRate(rateStr) {
 	return parseFloat(String(rateStr).replace(/[^0-9.\-]/g, ''));
 }
 
-function parseSub(stype, multiplier, count) {
+function parseSub(stype, multiplier, inputCount) {
 	const mechanics = getTableData('mechanics');
 
 	const obj = mechanics.find(m => m.category === 'submission' && m.type === stype)
 	const multi = multiplier ? mechanics.find(m => m.category === 'multiplier' && m.type === multiplier).rate : 1;
-	const count = count ?? 1;
+	const count = inputCount ?? 1;
 
 	const basePayout = obj.rate * multi;
 
@@ -66,8 +66,8 @@ function parseSub(stype, multiplier, count) {
 		type: stype,
 		quantity: count,
 		rate: obj.rate,
-		modifiers: [multiplier],
-		totalPayout: basePayout
+		modifiers: multiplier ? [multiplier] : [],
+		totalPayout: basePayout * count
 	}
 
 }
@@ -185,7 +185,7 @@ async function mainFunction(replyTarget, submissionStr, multiplierStr, count, ta
 
 	const breakdown = formatBreakdown(result);
 	const message =
-		`**\`\`\`${breakdown}\n\nAdded ${totalPayout.toLocaleString()} Capital to ${thisMun.name}'s wallet!\`\`\`**`;
+		`**\`\`\`${breakdown}\n\nAdded ${result.totalPayout.toLocaleString()} Capital to ${thisMun.name}'s wallet!\`\`\`**`;
 	const embed = basicEmbed('', message, '', '', '', false);
 	embed.setColor(embedColour(true));
 	embed.setFooter({ text: `💰 NEW BALANCE: ${thisMun.capital} Capital` });
@@ -204,7 +204,7 @@ export default {
 	},
 	async autocomplete(interaction) {
 		const focusValue = interaction.options.getFocused(true);
-		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type', 'category', focusValue);
+		const filter = fuzzyMatchOnTable(focusValue.value, 25, 'mechanics', 'type', 'category', focusValue.name);
 
 		await interaction.respond(filter.map((choice) => ({ name: choice, value: choice })));
 	}

@@ -40,7 +40,7 @@ const commandBuilder = new SlashCommandBuilder()
 async function changeWallet(interaction, amount, mun, currency) {
 
 	let actionMessage;
-	const thumbnail = 'https://p0.piqsels.com/preview/28/212/916/coin-coins-money-finance.jpg';
+	const thumbnail = 'https://i.imgur.com/GKR448L.jpeg';
 
 	const result = await mun.addScrip(amount, currency === "tokens")
 	if (currency === "tokens") {
