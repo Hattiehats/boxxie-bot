@@ -19,7 +19,7 @@ function getTodayMMDD() {
 /**
  * Check for character birthdays today and send a message to the notices channel.
  */
-async function checkBirthdays(client) {
+export async function checkBirthdays(client) {
 	const today = getTodayMMDD();
 
 	// Only send once per calendar day

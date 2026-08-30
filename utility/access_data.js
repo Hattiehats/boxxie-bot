@@ -4,6 +4,7 @@ import { existsSync } from "node:fs";
 import { Low } from "lowdb";
 import { generateDaily } from "./dailies.js";
 import { DateTime } from "luxon";
+import { checkBirthdays } from "./birthday_checker.js";
 
 export const SHEET_RANGES = [
 	{
@@ -1196,6 +1197,7 @@ export async function periodicSync(client) {
 				if (channel) {
 					//await channel.send({ embeds: [generateDaily()] });
 					await channel.send({ content: await generateDaily(channel) });
+					await checkBirthdays(client);
 					console.log('[Sync] Sent daily refresh embed to cubicles channel.');
 				} else {
 					console.error(`[Sync] Could not find cubicles channel ${CUBICLES_CHANNEL_ID}`);
@@ -1228,6 +1230,7 @@ export function startPeriodicSync(client) {
 		syncTimer = setTimeout(async () => {
 			try {
 				await periodicSync(client);
+
 			} catch (e) {
 				console.error('[Sync] Unhandled error:', e);
 			}

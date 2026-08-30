@@ -1,6 +1,5 @@
 import { Events } from 'discord.js';
 import { startPeriodicSync } from '../utility/access_data.js';
-import { startBirthdayChecker } from '../utility/birthday_checker.js';
 import { startCycleMood } from '../utility/update_mood.js';
 
 export default {
@@ -9,7 +8,8 @@ export default {
 	execute(client) {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 
-		startBirthdayChecker(client);
+		// Periodic Sync now runs the birthday checker as part of it
+		// startBirthdayChecker(client);
 		startPeriodicSync(client);
 		startCycleMood(client);
 	},
