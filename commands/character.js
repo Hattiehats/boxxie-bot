@@ -9,20 +9,19 @@ const STAT_FIELDS = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mve', 'rgd', 'lc
 const PROFILE_FIELDS = ['aka', 'age', 'gender', 'pronouns', 'height', 'birthday', 'image'];
 const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
 
+const EMPTY = '\u200b';
+
 /**
  * @param {Character} OC 
  * @returns {EmbedBuilder} 
  */
-async function createProfileEmbed(OC) {
-	let currentItem = false;
-	if (OC.currentStats.equippedItem) {
-		currentItem = new Item(OC.currentStats.equippedItem);
-	}
+async function createProfileEmbed(OC, currentItem) {
+	const itemDescription = currentItem ? `**${currentItem.name}**\n${currentItem.description}` : "** Nothing Equipped **";
 	const embedMessage = new EmbedBuilder()
 		.setTitle(OC.name)
 		.addFields(
 			{
-				name: "",
+				name: EMPTY,
 				value: "**```\n📋 COMPANY PROXY DOSSIER \n```**",
 				inline: false
 			},
@@ -57,7 +56,7 @@ async function createProfileEmbed(OC) {
 				inline: true
 			},
 			{
-				name: "",
+				name: EMPTY,
 				value: "**```\n🎲 CURRENT STATS\n```**",
 				inline: false
 			},
@@ -112,15 +111,13 @@ async function createProfileEmbed(OC) {
 				inline: false
 			},
 			{
-				name: "",
+				name: EMPTY,
 				value: "**```\n🗃️ OTHER\n```**",
 				inline: false
 			},
 			{
 				name: "`EQUIPPED ITEM:`",
-				value: currentItem
-					? `**${currentItem.name}**\n${currentItem.description}`
-					: "** Nothing Equipped **",
+				value: itemDescription,
 				inline: false
 			},
 			{
@@ -132,13 +129,16 @@ async function createProfileEmbed(OC) {
 				name: "`MUN:`",
 				value: OC.mun,
 				inline: true
-			},
+			}
 		)
 		.setThumbnail(OC.image);
 
 	if (OC.aka != "") {
 		embedMessage
 			.setDescription(`> ***AKA**: ${OC.aka}*`)
+	} else {
+		embedMessage
+			.setDescription(EMPTY)
 	}
 
 	return addStandardFormat(embedMessage);
@@ -264,9 +264,15 @@ export default {
 			return;
 		}
 
+		let currentItem = false;
+
+		if (characterInfo.currentStats.equippedItem) {
+			currentItem = new Item(characterInfo.currentStats.equippedItem);
+		}
+		console.log(`OC item: ${characterInfo.currentStats.equippedItem}, item: ${currentItem}`);
 		if (interaction.options.getSubcommand() === 'profile') {
 			await interaction.editReply(
-				{ embeds: [createProfileEmbed(characterInfo)] }
+				{ embeds: [createProfileEmbed(characterInfo, currentItem)] }
 			);
 		}
 		else if (interaction.options.getSubcommand() === 'change') {

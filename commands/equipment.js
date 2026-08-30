@@ -9,14 +9,14 @@ const commandBuilder = new SlashCommandBuilder()
 	.setDescription("Equip an item to your character")
 	.addStringOption((option) =>
 		option
-			.setName("Item")
+			.setName("item")
 			.setDescription("The item in question, or leave blank to unequip")
 			.setRequired(false)
 			.setAutocomplete(true)
 	)
 	.addStringOption((option) =>
 		option
-			.setName("Character")
+			.setName("character")
 			.setDescription("Character to equip it to, defaults to your primary")
 			.setRequired(false)
 			.setAutocomplete(true)
@@ -30,7 +30,7 @@ async function mainFunction(interaction) {
 	const mun = new Mun(munName);
 	const inventory = await mun.inventory;
 
-	let ocName = interaction.options.getString("Character");
+	let ocName = interaction.options.getString("character");
 	if (!ocName) {
 		ocName = mun.ocs.split(",")[0]
 	}
@@ -45,7 +45,7 @@ async function mainFunction(interaction) {
 
 	const char = new Character(ocName);
 
-	const itemName = interaction.options.getString("Item");
+	const itemName = interaction.options.getString("item");
 
 	if (!itemName) {
 		// unequip
@@ -112,7 +112,7 @@ export default {
 		const focusedValue = interaction.option.getFocused(true);
 		const mun = new Mun(getTableData("muns").find((row) => row.id === interaction.user.id));
 		switch (focusedValue.name) {
-			case "Item":
+			case "item":
 				const inventory = await mun.inventory;
 				const choices = inventory.getAllItemNames()
 					.filter((name) => {
@@ -124,7 +124,7 @@ export default {
 					filtered.map((choice) => ({ name: choice, value: choice })),
 				);
 				break;
-			case "Character":
+			case "character":
 				await interaction.respond(mun.ocs.split(",").map((oc) => ({ name: oc, value: oc })));
 		}
 		await interaction.respond(
