@@ -316,6 +316,10 @@ const currentStatKeys = [
 	{
 		db: "dailyDrink",
 		sheet: "Daily Drink"
+	},
+	{
+		db: "equippedItem",
+		sheet: "Equipped Item"
 	}
 ]
 const inventoryKeys = [

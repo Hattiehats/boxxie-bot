@@ -13,9 +13,9 @@ import {
 	SeparatorSpacingSize,
 } from "discord.js";
 import { getTableData, addInventoryRow } from "../utility/access_data.js";
-import { Item, Mun } from "../utility/classes.js";
+import { Character, Item, Mun } from "../utility/classes.js";
 import { simpleComponent, fuzzyMatchItems } from "../utility/components.js";
-import { basicEmbed, embedColour } from "../utility/format_embed.js";
+import { embedColour } from "../utility/format_embed.js";
 
 const commandBuilder = new SlashCommandBuilder()
 	.setName("item")
@@ -107,6 +107,17 @@ function buildItemInfoComponents(item, ownedQty) {
 			);
 		}
 
+		// TODO: Equipping items here would be nice.
+		/*if (item.type.toUpperCase() === "EQUIPMENT") {
+			buttons.push(
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Success)
+					.setLabel("Equip")
+					.setEmoji({ name: "🔧" })
+					.setCustomId("item:equip"),
+			);
+		}*/
+
 		components.push(new ActionRowBuilder().addComponents(...buttons));
 	}
 
@@ -141,6 +152,8 @@ async function handleCollector(interaction, reply, item, _inventory) {
 	const mun = new Mun(munData.name);
 	let inventory = await mun.inventory;
 
+	let unequipItem = false;
+
 	// ---- USE ----
 	if (response.customId === "item:use") {
 		try {
@@ -165,6 +178,10 @@ async function handleCollector(interaction, reply, item, _inventory) {
 	// ---- DESTROY ----
 	if (response.customId === "item:destroy") {
 		try {
+			if (inventory.getItemQuantity(item.name) === 1) {
+				unequipItem = true;
+			}
+
 			await inventory.addItem(item.name, -1);
 			await response.update({
 				components: simpleComponent(
@@ -172,14 +189,30 @@ async function handleCollector(interaction, reply, item, _inventory) {
 				),
 				flags: MessageFlags.IsComponentsV2,
 			});
+
 		} catch {
 			await response.update({
 				components: simpleComponent("### An error has occured", undefined, false),
 				flags: MessageFlags.IsComponentsV2,
 			});
 		}
-		return;
+
+		try {
+			if (unequipItem) {
+				await mun.ocs.map(mun => {
+					const cha = new Character(mun.name);
+					if (cha.currentItem === item.name) {
+						cha.currentStats.unequipItem();
+					}
+				});
+			}
+			return;
+		} catch (err) {
+			console.error(`Error unequipping ${item.name} from ${mun.name}'s characters!`);
+		}
 	}
+
+
 
 	// ---- GIFT ----
 	if (response.customId === "item:gift") {

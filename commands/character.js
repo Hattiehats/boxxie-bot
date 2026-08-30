@@ -13,7 +13,11 @@ const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
  * @param {Character} OC 
  * @returns {EmbedBuilder} 
  */
-function createProfileEmbed(OC) {
+async function createProfileEmbed(OC) {
+	let currentItem = false;
+	if (OC.currentStats.equippedItem) {
+		currentItem = new Item(OC.currentStats.equippedItem);
+	}
 	const embedMessage = new EmbedBuilder()
 		.setTitle(OC.name)
 		.addFields(
@@ -110,6 +114,13 @@ function createProfileEmbed(OC) {
 			{
 				name: "",
 				value: "**```\n🗃️ OTHER\n```**",
+				inline: false
+			},
+			{
+				name: "`EQUIPPED ITEM:`",
+				value: currentItem
+					? `**${currentItem.name}**\n${currentItem.description}`
+					: "** Nothing Equipped **",
 				inline: false
 			},
 			{

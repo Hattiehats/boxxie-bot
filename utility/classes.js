@@ -350,6 +350,10 @@ export class Character extends DBTable {
 		return new currentStats(this.name)
 	}
 
+	get currentItem() {
+		return new Item(this.currentStats.equippedItem);
+	}
+
 	async reprint() {
 		//Resets stats
 		const stats = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mle', 'rgd', 'lck'];
@@ -409,11 +413,20 @@ export class currentStats extends DBTable {
 		this.error = this.data.error;
 		this.daily = this.data.daily;
 		this.dailyConsequence = this.data.dailyConsequence;
-		this.dailyDrink = this.data.dailyDrink
+		this.dailyDrink = this.data.dailyDrink;
+		this.equippedItem = this.data.equippedItem;
 	}
 
 	async setStat(statName, newValue) {
 		await super.changeProperty(statName, newValue);
+	}
+
+	async equipItem(name) {
+		await super.changeProperty('equippedItem', name);
+	}
+
+	async unequipItem() {
+		await super.changeProperty('equippedItem', null);
 	}
 
 }
