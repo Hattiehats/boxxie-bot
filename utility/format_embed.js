@@ -10,6 +10,7 @@ export function embedColour(success) {
 	return parseEmbedColour(success ? process.env.EMBED_SUCCESS_COLOUR : process.env.EMBED_FAIL_COLOUR);
 }
 
+export const EMPTY = '\u200b';
 const iconList = [
 	'https://img.icons8.com/?size=96&id=63804&format=png',
 	'https://img.icons8.com/?size=80&id=21392&format=png',
@@ -41,22 +42,22 @@ export const potentialFooterTexts = [
 	"The contents above are to be considered Confidential.",
 ]
 
-export function basicEmbed(title = "", description = "", thumbnail = "", image = "", link = "", format = true) {
+export function basicEmbed(title = EMPTY, description = EMPTY, thumbnail = EMPTY, image = EMPTY, link = EMPTY, format = true) {
 	let embedMessage = new EmbedBuilder();
 
-	if (title != "") {
+	if (title != EMPTY) {
 		embedMessage.setTitle(title);
 	}
-	if (description != "") {
+	if (description != EMPTY) {
 		embedMessage.setDescription(description);
 	}
-	if (thumbnail != "") {
+	if (thumbnail != EMPTY) {
 		embedMessage.setThumbnail(thumbnail);
 	}
-	if (image != "") {
+	if (image != EMPTY) {
 		embedMessage.setImage(image);
 	}
-	if (link != "") {
+	if (link != EMPTY) {
 		embedMessage.setURL(link);
 	}
 

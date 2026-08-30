@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, SlashCommandSubcommandBuilder, MessageFlags } from 'discord.js';
-import { addStandardFormat, basicEmbed } from '../utility/format_embed.js';
+import { addStandardFormat, basicEmbed, EMPTY } from '../utility/format_embed.js';
 import { getTableData } from '../utility/access_data.js';
 import { Character } from '../utility/classes.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
@@ -9,7 +9,6 @@ const STAT_FIELDS = ['str', 'dex', 'int', 'cha', 'dur', 'res', 'mve', 'rgd', 'lc
 const PROFILE_FIELDS = ['aka', 'age', 'gender', 'pronouns', 'height', 'birthday', 'image'];
 const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
 
-const EMPTY = '\u200b';
 
 
 async function createItemEmbed(currentItem) {
