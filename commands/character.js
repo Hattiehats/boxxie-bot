@@ -11,12 +11,15 @@ const ALL_FIELDS = [...PROFILE_FIELDS, ...STAT_FIELDS];
 
 const EMPTY = '\u200b';
 
+
+async function createItemEmbed(currentItem) {
+	return basicEmbed("Equipped Item", `**${currentItem.name}**\n${currentItem.description}`, currentItem.image)
+}
 /**
  * @param {Character} OC 
  * @returns {EmbedBuilder} 
  */
-async function createProfileEmbed(OC, currentItem) {
-	const itemDescription = currentItem ? `**${currentItem.name}**\n${currentItem.description}` : "** Nothing Equipped **";
+async function createProfileEmbed(OC) {
 	const embedMessage = new EmbedBuilder()
 		.setTitle(OC.name)
 		.addFields(
@@ -113,11 +116,6 @@ async function createProfileEmbed(OC, currentItem) {
 			{
 				name: EMPTY,
 				value: "**```\n🗃️ OTHER\n```**",
-				inline: false
-			},
-			{
-				name: "`EQUIPPED ITEM:`",
-				value: itemDescription,
 				inline: false
 			},
 			{
@@ -271,8 +269,14 @@ export default {
 		}
 		console.log(`OC item: ${characterInfo.currentStats.equippedItem}, item: ${currentItem}`);
 		if (interaction.options.getSubcommand() === 'profile') {
+			const embeds = [];
+			embeds.push(createProfileEmbed(characterInfo));
+			if (currentItem) {
+				embeds.push(createItemEmbed(currentItem));
+			}
+
 			await interaction.editReply(
-				{ embeds: [createProfileEmbed(characterInfo, currentItem)] }
+				{ embeds }
 			);
 		}
 		else if (interaction.options.getSubcommand() === 'change') {
