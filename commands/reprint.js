@@ -4,7 +4,7 @@ import { Character, getFlavorText } from '../utility/classes.js';
 import { getTableData } from '../utility/access_data.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
 import { embedColour, basicEmbed } from '../utility/format_embed.js';
-import { getCustomCommandContent } from '../utility/custom_commands.js';
+import { getCustomCommandContent, customCommandExists } from '../utility/custom_commands.js';
 // import { AB_DATA } from '../initialize-data.js';
 
 // let compMessage = AB_DATA.getFlavorText("Reprint_Warning");
@@ -73,7 +73,7 @@ function setComponent(ocName) {
 async function getReconError() {
 	if (!customCommandExists(RECON_ERR)) return null;
 	const result = await getCustomCommandContent(RECON_ERR);
-	return result || null;
+	return result.content || null;
 }
 
 const DEFAULT_ERROR_TABLE = `[**METANARRATIVE DISSONANCE**]: Overcome with dizziness and agonizing head pain, collapsing to the floor of the reconstruction chamber, you suddenly realise this body belongs to one of your parallel selves. The reality of your multiversal body snatching only has a moment to set in as the pain of being alive again pulls the thought away like a bad dream.`;
@@ -85,7 +85,7 @@ As the door of the reconstruction pod rumbles open and the light hits your eyes,
 
 Something [TERRIBLE?] [WONDERFUL?] has happened.
 
-${ocName} has experienced an [ECTOPIC EXPRESSION]. Please either roll a [d10] to choose randomly from the list below, or select whichever one you like. This will affect you until your next reconstruction.\`\`\``;
+${ocName} has experienced an [ECTOPIC EXPRESSION]. Please either roll a [d5] to choose randomly from the list below, or select whichever one you like. This will affect you until your next reconstruction.\`\`\``;
 	return new ContainerBuilder()
 		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
@@ -99,8 +99,7 @@ function createReconPostLude() {
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
 				`\`\`\`ini
-You should check in with [DR. FUCHES] if you can, then head to [HR]… you have paperwork to sign.
-				\`\`\``
+You should check in with [DR. FUCHES] if you can, then head to [HR]… you have paperwork to sign.\`\`\``
 			)
 		)
 }
@@ -112,7 +111,7 @@ async function reprintMessage(interaction) {
 	const ocName = interaction.options.getString("oc");
 
 	const reprintContent = `### ${ocName} has been cleanly reconstructed. Please resume your duties.`;
-	const errorContent = getReconError() ?? DEFAULT_ERROR_TABLE;
+	const errorContent = await getReconError() ?? DEFAULT_ERROR_TABLE;
 	const reprintConfirmMessage = [
 		new ContainerBuilder()
 			.setAccentColor(embedColour(true))
