@@ -426,7 +426,7 @@ export class currentStats extends DBTable {
 	}
 
 	async unequipItem() {
-		await super.changeProperty('equippedItem', null);
+		await super.changeProperty('equippedItem', undefined);
 	}
 
 }

@@ -55,9 +55,10 @@ async function mainFunction(interaction) {
 				components: simpleComponent(`Cleared equipment from ${char.name}!`),
 				flags: MessageFlags.IsComponentsV2,
 			});
+			return;
 		} catch (error) {
-			logging.error(`error removing item from ${char.name}`);
-			logging.error(error);
+			console.error(`error removing item from ${char.name}`);
+			console.error(error);
 			await interaction.editReply({
 				components: simpleComponent(`Unable to remove ${char.name}'s Equipment`),
 				flags: MessageFlags.IsComponentsV2,
@@ -68,6 +69,8 @@ async function mainFunction(interaction) {
 
 	const thisItem = inventory.getItem(itemName);
 
+	console.log(thisItem);
+
 	if (thisItem === "Not in inventory!") {
 		await interaction.editReply({
 			components: simpleComponent("That item is not in your inventory! ❌"),
@@ -76,7 +79,8 @@ async function mainFunction(interaction) {
 		return;
 	}
 
-	if (!thisItem.type != 'Equipment') {
+
+	if (thisItem.type != 'Equipment') {
 		await interaction.editReply({
 			components: simpleComponent("This item can't be equipped! ❌"),
 			flags: MessageFlags.IsComponentsV2,
@@ -90,14 +94,15 @@ async function mainFunction(interaction) {
 
 		const msg = `### ${char.name} equipped ${itemName}!\n${thisItem.description}`;
 		await interaction.editReply({
-			components: simpleComponent(msg, thumbnail)
+			components: simpleComponent(msg, thumbnail || ""),
+			flags: MessageFlags.IsComponentsV2,
 		});
 		return;
 
 
 	} catch (error) {
-		logging.error(`Error in equipping item ${itemName} to ${char.name}`);
-		logging.error(error);
+		console.error(`Error in equipping item ${itemName} to ${char.name}`);
+		console.error(error);
 		await interaction.editReply({
 			components: simpleComponent(`Error in equipping ${itemName} to ${char.name}`),
 			flags: MessageFlags.IsComponentsV2,
@@ -109,8 +114,8 @@ async function mainFunction(interaction) {
 export default {
 	data: commandBuilder,
 	async autocomplete(interaction) {
-		const focusedValue = interaction.option.getFocused(true);
-		const mun = new Mun(getTableData("muns").find((row) => row.id === interaction.user.id));
+		const focusedValue = interaction.options.getFocused(true);
+		const mun = new Mun(getTableData("muns").find((row) => row.id === interaction.user.id).name);
 		switch (focusedValue.name) {
 			case "item":
 				const inventory = await mun.inventory;
@@ -126,10 +131,8 @@ export default {
 				break;
 			case "character":
 				await interaction.respond(mun.ocs.split(",").map((oc) => ({ name: oc, value: oc })));
+				break;
 		}
-		await interaction.respond(
-			filtered.map((name) => ({ name: name, value: name })),
-		);
 	},
 	async execute(interaction) {
 		await mainFunction(interaction);

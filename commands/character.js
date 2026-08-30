@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, SlashCommandSubcommandBuilder, MessageFlags } from 'discord.js';
 import { addStandardFormat, basicEmbed, EMPTY } from '../utility/format_embed.js';
 import { getTableData } from '../utility/access_data.js';
-import { Character } from '../utility/classes.js';
+import { Character, Item } from '../utility/classes.js';
 import { fuzzyMatchOCNames } from '../utility/utils.js';
 
 // All changeable fields: profile info + stats
@@ -270,7 +270,7 @@ export default {
 
 		let currentItem = false;
 
-		if (characterInfo.currentStats.equippedItem) {
+		if (characterInfo.currentStats.equippedItem && characterInfo.currentStats.equippedItem != "null" && characterInfo.currentStats.equippedItem != "undefined") {
 			currentItem = new Item(characterInfo.currentStats.equippedItem);
 		}
 
@@ -278,9 +278,10 @@ export default {
 			const embed = createProfileEmbed(characterInfo, currentItem);
 			try {
 				await interaction.editReply(
-					{ embeds: embed }
+					{ embeds: [embed] }
 				);
 			} catch (error) {
+				console.error(error);
 				console.error("API ERROR");
 				console.error("Status:", error.status);
 				console.error("Code:", error.code);
