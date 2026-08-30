@@ -25,7 +25,7 @@ export const SHEET_RANGES = [
 	},
 	{
 		sheet: "Current Stats",
-		range: "A:P"
+		range: "A:Q"
 	},
 	{
 		sheet: "Inventory Rows",

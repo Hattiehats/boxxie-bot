@@ -18,7 +18,7 @@ async function createItemEmbed(currentItem) {
  * @param {Character} OC 
  * @returns {EmbedBuilder} 
  */
-async function createProfileEmbed(OC) {
+function createProfileEmbed(OC, currentItem) {
 	const embedMessage = new EmbedBuilder()
 		.setTitle(OC.name)
 		.addFields(
@@ -116,6 +116,13 @@ async function createProfileEmbed(OC) {
 				name: EMPTY,
 				value: "**```\n🗃️ OTHER\n```**",
 				inline: false
+			},
+			{
+				name: "`Equipped Item:`",
+				value: currentItem
+					? `**${currentItem.name}**\n${currentItem.description}`
+					: `None`,
+				inline: false,
 			},
 			{
 				name: "`RECONS:`",
@@ -266,17 +273,19 @@ export default {
 		if (characterInfo.currentStats.equippedItem) {
 			currentItem = new Item(characterInfo.currentStats.equippedItem);
 		}
-		console.log(`OC item: ${characterInfo.currentStats.equippedItem}, item: ${currentItem}`);
-		if (interaction.options.getSubcommand() === 'profile') {
-			const embeds = [];
-			embeds.push(createProfileEmbed(characterInfo));
-			if (currentItem) {
-				embeds.push(createItemEmbed(currentItem));
-			}
 
-			await interaction.editReply(
-				{ embeds }
-			);
+		if (interaction.options.getSubcommand() === 'profile') {
+			const embed = createProfileEmbed(characterInfo, currentItem);
+			try {
+				await interaction.editReply(
+					{ embeds: embed }
+				);
+			} catch (error) {
+				console.error("API ERROR");
+				console.error("Status:", error.status);
+				console.error("Code:", error.code);
+				console.error("Raw Body", JSON.stringify(error.requestBody, null, 2));
+			}
 		}
 		else if (interaction.options.getSubcommand() === 'change') {
 			const field = interaction.options.getString('field');
