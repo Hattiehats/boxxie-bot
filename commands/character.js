@@ -50,7 +50,7 @@ function createProfileEmbed(OC) {
 			{
 				name: "`CONSULTANCY:`",
 				value: `${OC.consultant}`,
-				inline: true 
+				inline: true
 			},
 			{
 				name: "",
@@ -219,6 +219,7 @@ const changeSubcommand =
 					{ name: 'CHA', value: 'cha' },
 					{ name: 'DUR', value: 'dur' },
 					{ name: 'RES', value: 'res' },
+					{ name: 'MLE', value: 'mle' },
 					{ name: 'RGD', value: 'rgd' },
 					{ name: 'LCK', value: 'lck' },
 				)
