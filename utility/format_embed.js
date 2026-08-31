@@ -42,22 +42,22 @@ export const potentialFooterTexts = [
 	"The contents above are to be considered Confidential.",
 ]
 
-export function basicEmbed(title = EMPTY, description = EMPTY, thumbnail = EMPTY, image = EMPTY, link = EMPTY, format = true) {
+export function basicEmbed(title, description, thumbnail, image, link, format = true) {
 	let embedMessage = new EmbedBuilder();
 
-	if (title != EMPTY) {
+	if (title) {
 		embedMessage.setTitle(title);
 	}
-	if (description != EMPTY) {
+	if (description) {
 		embedMessage.setDescription(description);
 	}
-	if (thumbnail != EMPTY) {
+	if (thumbnail) {
 		embedMessage.setThumbnail(thumbnail);
 	}
-	if (image != EMPTY) {
+	if (image) {
 		embedMessage.setImage(image);
 	}
-	if (link != EMPTY) {
+	if (link) {
 		embedMessage.setURL(link);
 	}
 
