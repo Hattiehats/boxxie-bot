@@ -700,7 +700,7 @@ export class Generator {
 		for (let i = 0; i < list.length; i++) {
 			weight += selectOdds(list[i].rarity);
 			if (rand <= weight) {
-				return list[i];
+				return list[i].trim();
 			}
 		}
 	}
