@@ -44,8 +44,8 @@ const data = new SlashCommandBuilder()
 	.addSubcommand(randomSubcommand);
 
 function generateSingularityName() {
-	const singularityNamePrefix = getMinimumCustomCommandContent(CODENAME_PREFIX);
-	const singularityNameSuffix = getMinimumCustomCommandContent(CODENAME_SUFFIX);
+	const singularityNamePrefix = getSplitCustomCommandContent(CODENAME_PREFIX);
+	const singularityNameSuffix = getSplitCustomCommandContent(CODENAME_SUFFIX);
 
 	return `${singularityNamePrefix} ${singularityNameSuffix}`.toUpperCase();
 }
@@ -58,7 +58,7 @@ function generateSingularityKeywords() {
 		let nextWord = '';
 		do {
 			nextWord = getSplitCustomCommandContent(SINGULARITY_OBSERVATIONS);
-		} while (keywordList.includes(nextWord));
+		} while (keywordList.includes(nextWord.toUpperCase()));
 
 		keywordList += `${nextWord.toUpperCase()}`;
 
