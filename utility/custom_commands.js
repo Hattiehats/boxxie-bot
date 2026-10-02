@@ -546,12 +546,13 @@ export function customCommandExists(commandName) {
 	});
 }
 
-export async function getSplitCustomCommandContent(commandName, divider = ',') {
+export function getSplitCustomCommandContent(commandName, divider = ',') {
 	const content = getMinimumCustomCommandContent(commandName);
+	console.log(`Content of fetch: ${content}`);
 	return pickOne(content.split(divider));
 }
 
-export async function getMinimumCustomCommandContent(commandName) {
+export function getMinimumCustomCommandContent(commandName) {
 	const allCommands = getTableData('prefixCommands');
 	if (!allCommands || !Array.isArray(allCommands)) return null;
 
