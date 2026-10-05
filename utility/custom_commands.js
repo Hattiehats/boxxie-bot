@@ -576,6 +576,7 @@ export function getEmbedFromCustomCommand(commandName, functor) {
 		if (entry.title) embed.setTitle(entry.title);
 		if (entry.content) embed.setDescription(functor(entry.content));
 		if (entry.color) { try { embed.setColor(entry.color) } catch { /* do nothing, whatevs */ } };
+		return embed;
 	});
 
 }
