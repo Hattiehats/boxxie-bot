@@ -4,6 +4,7 @@ import {
 } from "discord.js";
 import {
 	customCommandExists,
+	getEmbedFromCustomCommand,
 	getMinimumCustomCommandContent,
 	getSplitCustomCommandContent,
 } from "../utility/custom_commands.js";
@@ -18,6 +19,8 @@ const SINGULARITY_SIGNATURE = "oddjob_signatures";
 const SINGULARITY_RISK = "oddjob_threatrange";
 const SINGULARITY_OBSERVATIONS = "oddjob_observations";
 const SINGULARITY_CONTACT = "oddjob_notification";
+const SINGULARITY_EMBEDS_RANDOM = "oddjob_random";
+const SINGULARITY_EMBEDS_PREGEN = "oddjob_pregen";
 
 // terms used in replacements
 const REPLACE_NAME = "$REPLACE_NAME";
@@ -98,6 +101,9 @@ async function generateSingularity(pregen = true) {
 		const sanityCheckSingularityNotification = customCommandExists(SINGULARITY_CONTACT);
 		if (!sanityCheckSingularityNotification) errorMsg += "Missing notification text; ";
 
+		const sanityCheckSingularityRadioText = customCommandExists(SINGULARITY_EMBEDS_RANDOM);
+		if (sanityCheckSingularityRadioText) errorMsg += "Missing relevant embed; ";
+
 		if (!!errorMsg) throw new Error(errorMsg);
 
 		singularityName = generateSingularityName();
@@ -107,21 +113,17 @@ async function generateSingularity(pregen = true) {
 		singularityRisk = getSplitCustomCommandContent(SINGULARITY_RISK);
 		singularityClassification = getSplitCustomCommandContent(SINGULARITY_CLASSIFICATION);
 
-		const singularityMessage = getMinimumCustomCommandContent(SINGULARITY_CONTACT)
-			.replace(REPLACE_NAME, singularityName)
-			.replace(REPLACE_CLASSIFICATION, singularityClassification)
-			.replace(REPLACE_RISK, singularityRisk)
-			.replace(REPLACE_SIGNATURE, singularitySignature)
-			.replace(REPLACE_OBSERVATIONS, singularityKeywords)
-			.replace(REPLACE_LOCALE, singularityLocale)
+		const embeds = getEmbedFromCustomCommand(SINGULARITY_EMBEDS_RANDOM, (entry) => {
+			return entry
+				.replace(REPLACE_NAME, singularityName)
+				.replace(REPLACE_CLASSIFICATION, singularityClassification)
+				.replace(REPLACE_RISK, singularityRisk)
+				.replace(REPLACE_SIGNATURE, singularitySignature)
+				.replace(REPLACE_OBSERVATIONS, singularityKeywords)
+				.replace(REPLACE_LOCALE, singularityLocale)
+		});
 
-		const embedMessage = basicEmbed(
-			"SINGULARITY DISPATCH",
-			singularityMessage,
-			''
-		);
-
-		return embedMessage;
+		return embeds;
 	}
 }
 
@@ -142,7 +144,7 @@ export default {
 			if (pregen) {
 				await message.reply("CLASSIFIED");
 			} else {
-				await message.reply({ embeds: [await generateSingularity(pregen)] });
+				await message.reply({ embeds: await generateSingularity(pregen) });
 			}
 			return;
 		} catch (error) {

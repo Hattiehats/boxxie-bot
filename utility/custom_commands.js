@@ -552,6 +552,34 @@ export function getSplitCustomCommandContent(commandName, divider = ',') {
 	return pickOne(content.split(divider));
 }
 
+/**
+ * Grabs a json string formatted embed object from customCommands, and makes an embed from it.
+ * params: commandName (string), functor (function)
+ * functor runs on each body element of the embed.
+ * Returns the embed in a completed state.
+ */
+export function getEmbedFromCustomCommand(commandName, functor) {
+	const rawCommand = getMinimumCustomCommandContent(commandName)
+	if (!rawCommand) throw new Error(`getMinimumCustomCommandContent for ${commandName} returned nothing!`);
+	let embedObject;
+
+	try {
+		embedObject = JSON.parse(rawCommand);
+	} catch {
+		throw new Error(`Embed object for command ${commandName} failed to parse!`);
+	}
+
+	if (!embedObject.elements || embedObject.elements.length === 0) throw new Errow(`No elements in embed object for command ${commandName}`);
+
+	return embedObject.elements.map((entry) => {
+		const embed = new EmbedBuilder();
+		if (entry.title) embed.setTitle(entry.title);
+		if (entry.content) embed.setDescription(functor(entry.content));
+		if (entry.color) { try { embed.setColor(entry.color) } catch { /* do nothing, whatevs */ } };
+	});
+
+}
+
 export function getMinimumCustomCommandContent(commandName) {
 	const allCommands = getTableData('prefixCommands');
 	if (!allCommands || !Array.isArray(allCommands)) return null;
