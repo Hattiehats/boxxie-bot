@@ -30,6 +30,7 @@ const REPLACE_OBSERVATIONS = "$REPLACE_OBSERVATIONS";
 const REPLACE_RISK = "$REPLACE_RISK";
 const REPLACE_SIGNATURE = "$REPLACE_SIGNATURE";
 
+const MAX_RANDOM_KEYWORDS = 4;
 
 const randomSubcommand =
 	new SlashCommandSubcommandBuilder()
@@ -54,7 +55,7 @@ function generateSingularityName() {
 }
 
 function generateSingularityKeywords() {
-	const numberOfKeywords = Math.floor((Math.random() * 5) + 1);
+	const numberOfKeywords = Math.floor((Math.random() * MAX_RANDOM_KEYWORDS) + 1);
 	let keywordList = "";
 
 	for (let i = 1; i <= numberOfKeywords; i++) {
