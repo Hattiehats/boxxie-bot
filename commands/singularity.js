@@ -102,7 +102,7 @@ async function generateSingularity(pregen = true) {
 		if (!sanityCheckSingularityNotification) errorMsg += "Missing notification text; ";
 
 		const sanityCheckSingularityRadioText = customCommandExists(SINGULARITY_EMBEDS_RANDOM);
-		if (sanityCheckSingularityRadioText) errorMsg += "Missing relevant embed; ";
+		if (!sanityCheckSingularityRadioText) errorMsg += "Missing relevant embed; ";
 
 		if (!!errorMsg) throw new Error(errorMsg);
 
