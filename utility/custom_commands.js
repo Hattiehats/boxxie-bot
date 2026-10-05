@@ -569,9 +569,9 @@ export function getEmbedFromCustomCommand(commandName, functor) {
 		throw new Error(`Embed object for command ${commandName} failed to parse!`);
 	}
 
-	if (!embedObject.elements || embedObject.elements.length === 0) throw new Errow(`No elements in embed object for command ${commandName}`);
+	if (!embedObject.entries || embedObject.entries.length === 0) throw new Error(`No entries in embed object for command ${commandName}`);
 
-	return embedObject.elements.map((entry) => {
+	return embedObject.entries.map((entry) => {
 		const embed = new EmbedBuilder();
 		if (entry.title) embed.setTitle(entry.title);
 		if (entry.content) embed.setDescription(functor(entry.content));
