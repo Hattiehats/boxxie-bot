@@ -55,7 +55,7 @@ function generateSingularityName() {
 }
 
 function generateSingularityKeywords() {
-	const numberOfKeywords = Math.floor((Math.random() * MAX_RANDOM_KEYWORDS) + 1);
+	const numberOfKeywords = Math.min(Math.floor((Math.random() * MAX_RANDOM_KEYWORDS) + 1), MAX_RANDOM_KEYWORDS);
 	let keywordList = "";
 
 	for (let i = 1; i <= numberOfKeywords; i++) {
