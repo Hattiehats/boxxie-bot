@@ -108,11 +108,11 @@ async function generateSingularity(pregen = true) {
 		if (!!errorMsg) throw new Error(errorMsg);
 
 		singularityName = generateSingularityName();
-		singularityLocale = getSplitCustomCommandContent(SINGULARITY_LOCALE_NAME);
+		singularityLocale = getSplitCustomCommandContent(SINGULARITY_LOCALE_NAME).toUpperCase();
 		singularityKeywords = generateSingularityKeywords();
 		singularitySignature = getSplitCustomCommandContent(SINGULARITY_SIGNATURE);
-		singularityRisk = getSplitCustomCommandContent(SINGULARITY_RISK);
-		singularityClassification = getSplitCustomCommandContent(SINGULARITY_CLASSIFICATION);
+		singularityRisk = getSplitCustomCommandContent(SINGULARITY_RISK).toUpperCase();
+		singularityClassification = getSplitCustomCommandContent(SINGULARITY_CLASSIFICATION).toUpperCase();
 
 		const embeds = getEmbedFromCustomCommand(SINGULARITY_EMBEDS_RANDOM, (entry) => {
 			return entry
