@@ -328,7 +328,7 @@ async function handleCollector(commandChoice, reply, interaction, ctx) {
 						await handleCollector("info", newResponse, interaction, ctx);
 					} catch (error) {
 						const errMsg = error.message.includes("Not enough ")
-							? `**\`\`\`ini\nERROR: Not enough [${item.currencyName}]\n You have [${mun[item.currency]}]\`\`\``
+							? `**\`\`\`md\nERROR: Not enough [${item.currencyName}]\n You have [${mun[item.currency]}]\`\`\``
 							: "### An error occured in purchase";
 						const errComp = [
 							new ContainerBuilder()

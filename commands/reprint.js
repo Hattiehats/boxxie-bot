@@ -80,7 +80,7 @@ const DEFAULT_ERROR_TABLE = `[**METANARRATIVE DISSONANCE**]: Overcome with dizzi
 
 async function createReconPreamble(ocName) {
 
-	const preamble = `\`\`\`ini
+	const preamble = `\`\`\`md
 As the door of the reconstruction pod rumbles open and the light hits your eyes, something feels wrong - *you* feel [WRONG]. 
 
 Something [TERRIBLE?] [WONDERFUL?] has happened.
@@ -98,7 +98,7 @@ function createReconPostLude() {
 		.setAccentColor(embedColour(false))
 		.addTextDisplayComponents(
 			new TextDisplayBuilder().setContent(
-				`\`\`\`ini
+				`\`\`\`md
 You should check in with [DR. FUCHES] if you can, then head to [HR]… you have paperwork to sign.\`\`\``
 			)
 		)
