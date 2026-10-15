@@ -19,6 +19,7 @@ const SINGULARITY_SIGNATURE = "oddjob_signatures";
 const SINGULARITY_RISK = "oddjob_threatrange";
 const SINGULARITY_OBSERVATIONS = "oddjob_observations";
 const SINGULARITY_CONTACT = "oddjob_notification";
+const SINGULARITY_PREGEN_OBSERVATIONS = "oddjob_pregen_text";
 const SINGULARITY_EMBEDS_RANDOM = "oddjob_random";
 const SINGULARITY_EMBEDS_PREGEN = "oddjob_pregen";
 
@@ -27,6 +28,7 @@ const REPLACE_NAME = "$REPLACE_NAME";
 const REPLACE_LOCALE = "$REPLACE_LOCALE";
 const REPLACE_CLASSIFICATION = "$REPLACE_CLASSIFICATION";
 const REPLACE_OBSERVATIONS = "$REPLACE_OBSERVATIONS";
+const REPLACE_TEXT = "$REPLACE_PREGEN";
 const REPLACE_RISK = "$REPLACE_RISK";
 const REPLACE_SIGNATURE = "$REPLACE_SIGNATURE";
 
@@ -82,51 +84,55 @@ async function generateSingularity(pregen = true) {
 	let singularitySignature;
 	let singularityRisk;
 	let singularityClassification;
+	let singularityText;
 
-	if (!pregen) {
-		let errorMsg = "";
-		const sanityCheckSingularityNames = customCommandExists(CODENAME_PREFIX) && customCommandExists(CODENAME_SUFFIX);
-		if (!sanityCheckSingularityNames) errorMsg += "Missing custom command for prefix or suffix; ";
+	let errorMsg = "";
+	const sanityCheckSingularityNames = customCommandExists(CODENAME_PREFIX) && customCommandExists(CODENAME_SUFFIX);
+	if (!sanityCheckSingularityNames && !pregen) errorMsg += "Missing custom command for prefix or suffix; ";
 
-		const sanityCheckSingularityLocale = customCommandExists(SINGULARITY_LOCALE_NAME);
-		if (!sanityCheckSingularityLocale) errorMsg += "Missing locale command; ";
+	const sanityCheckSingularityLocale = customCommandExists(SINGULARITY_LOCALE_NAME);
+	if (!sanityCheckSingularityLocale && !pregen) errorMsg += "Missing locale command; ";
 
-		const sanityCheckSingularityClassification = customCommandExists(SINGULARITY_CLASSIFICATION);
-		if (!sanityCheckSingularityClassification) errorMsg += "Missing classification command; ";
+	const sanityCheckSingularityClassification = customCommandExists(SINGULARITY_CLASSIFICATION);
+	if (!sanityCheckSingularityClassification && !pregen) errorMsg += "Missing classification command; ";
 
-		const sanityCheckSingularityObservations = customCommandExists(SINGULARITY_OBSERVATIONS);
-		if (!sanityCheckSingularityObservations) errorMsg += "Missing observations; ";
+	const sanityCheckSingularityObservations = customCommandExists(SINGULARITY_OBSERVATIONS);
+	if (!sanityCheckSingularityObservations && !pregen) errorMsg += "Missing observations; ";
 
-		const sanityCheckSingularityRisk = customCommandExists(SINGULARITY_RISK);
-		if (!sanityCheckSingularityRisk) errorMsg += "Missing Risk rating; ";
+	const sanityCheckSingularityRisk = customCommandExists(SINGULARITY_RISK);
+	if (!sanityCheckSingularityRisk && !pregen) errorMsg += "Missing Risk rating; ";
 
-		const sanityCheckSingularityNotification = customCommandExists(SINGULARITY_CONTACT);
-		if (!sanityCheckSingularityNotification) errorMsg += "Missing notification text; ";
+	const sanityCheckSingularityNotification = customCommandExists(SINGULARITY_CONTACT);
+	if (!sanityCheckSingularityNotification && !pregen) errorMsg += "Missing notification text; ";
 
-		const sanityCheckSingularityRadioText = customCommandExists(SINGULARITY_EMBEDS_RANDOM);
-		if (!sanityCheckSingularityRadioText) errorMsg += "Missing relevant embed; ";
+	const sanityCheckSingularityRadioText = customCommandExists(SINGULARITY_EMBEDS_RANDOM);
+	if (!sanityCheckSingularityRadioText && !pregen) errorMsg += "Missing relevant embed; ";
 
-		if (!!errorMsg) throw new Error(errorMsg);
+	const sanityCheckSingularityPregenMessageText = customCommandExists(SINGULARITY_EMBEDS_PREGEN);
+	if (!sanityCheckSingularityPregenMessageText && pregen) errorMsg += "Missing pregen embed; ";
 
-		singularityName = generateSingularityName();
-		singularityLocale = getSplitCustomCommandContent(SINGULARITY_LOCALE_NAME).toUpperCase();
-		singularityKeywords = generateSingularityKeywords();
-		singularitySignature = getSplitCustomCommandContent(SINGULARITY_SIGNATURE);
-		singularityRisk = getSplitCustomCommandContent(SINGULARITY_RISK).toUpperCase();
-		singularityClassification = getSplitCustomCommandContent(SINGULARITY_CLASSIFICATION).toUpperCase();
+	if (!!errorMsg) throw new Error(errorMsg);
 
-		const embeds = getEmbedFromCustomCommand(SINGULARITY_EMBEDS_RANDOM, (entry) => {
-			return entry
-				.replace(REPLACE_NAME, singularityName)
-				.replace(REPLACE_CLASSIFICATION, singularityClassification)
-				.replace(REPLACE_RISK, singularityRisk)
-				.replace(REPLACE_SIGNATURE, singularitySignature)
-				.replace(REPLACE_OBSERVATIONS, singularityKeywords)
-				.replace(REPLACE_LOCALE, singularityLocale)
-		});
+	singularityName = generateSingularityName();
+	singularityLocale = getSplitCustomCommandContent(SINGULARITY_LOCALE_NAME).toUpperCase();
+	singularityKeywords = generateSingularityKeywords();
+	singularitySignature = getSplitCustomCommandContent(SINGULARITY_SIGNATURE);
+	singularityRisk = getSplitCustomCommandContent(SINGULARITY_RISK).toUpperCase();
+	singularityClassification = getSplitCustomCommandContent(SINGULARITY_CLASSIFICATION).toUpperCase();
+	singularityText = getMinimumCustomCommandContent(SINGULARITY_PREGEN_OBSERVATIONS);
 
-		return embeds;
-	}
+	const embeds = getEmbedFromCustomCommand((pregen ? SINGULARITY_EMBEDS_PREGEN : SINGULARITY_EMBEDS_RANDOM), (entry) => {
+		return entry
+			.replace(REPLACE_NAME, singularityName)
+			.replace(REPLACE_CLASSIFICATION, singularityClassification)
+			.replace(REPLACE_RISK, singularityRisk)
+			.replace(REPLACE_SIGNATURE, singularitySignature)
+			.replace(REPLACE_OBSERVATIONS, singularityKeywords)
+			.replace(REPLACE_LOCALE, singularityLocale)
+			.replace(REPLACE_TEXT, singularityText)
+	});
+
+	return embeds;
 }
 
 export default {
@@ -143,12 +149,7 @@ export default {
 
 		try {
 			const pregen = args.trim() === "pregen";
-			if (pregen) {
-				await message.reply("CLASSIFIED");
-			} else {
-				await message.reply({ embeds: await generateSingularity(pregen) });
-			}
-			return;
+			await message.reply({ embeds: await generateSingularity(pregen) });
 		} catch (error) {
 			console.log("Error in !singularity");
 			console.log(error);
