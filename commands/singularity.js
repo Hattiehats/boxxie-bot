@@ -8,7 +8,6 @@ import {
 	getMinimumCustomCommandContent,
 	getSplitCustomCommandContent,
 } from "../utility/custom_commands.js";
-import { basicEmbed } from "../utility/format_embed.js";
 
 // Custom command names
 const CODENAME_PREFIX = "oddjob_codenames_prefix";
@@ -35,20 +34,11 @@ const REPLACE_SIGNATURE = "$REPLACE_SIGNATURE";
 const MAX_RANDOM_KEYWORDS = 4;
 const MIN_RANDOM_KEYWORDS = 2;
 
-const randomSubcommand =
-	new SlashCommandSubcommandBuilder()
-		.setName("random")
-		.setDescription("Generate a new Singularity");
-
-/*const pregenSubcommand =
-	new SlashCommandSubcommandBuilder()
-		.setName("pregen")
-		.setDescription("Fetch a random Singularity");*/
 
 const data = new SlashCommandBuilder()
 	.setName("singularity")
 	.setDescription("Singularity generator commands")
-	.addSubcommand(randomSubcommand);
+	.addStringOption((option) => option.setName("pregentype").setDescription("What kind of singularity?").addChoices([{ name: "Random", value: "random" }, { name: "Pregen", value: "pregen" }]).setRequired(true));
 
 function generateSingularityName() {
 	const singularityNamePrefix = getSplitCustomCommandContent(CODENAME_PREFIX);
@@ -137,10 +127,16 @@ async function generateSingularity(pregen = true) {
 
 export default {
 	data: data,
-	/*async execute(interaction) {
-		await interaction.deferReply();
-
-	},*/
+	async execute(interaction) {
+		try {
+			const selectedOption = interaction.options.getString("pregentype");
+			await interaction.reply({ embeds: await generateSingularity(selectedOption === "pregen") });
+		} catch (error) {
+			console.log("Error in singularity command");
+			console.log(error);
+			return;
+		}
+	},
 	async executePrefix(message, args) {
 		if (!args) {
 			await message.reply('Usage: `!singularity <random|pregen>`');
