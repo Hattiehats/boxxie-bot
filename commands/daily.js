@@ -46,7 +46,11 @@ const commandBuilder = new SlashCommandBuilder()
 export function getRandomOC(excludeMun) {
 	const allOCs = getTableData("ocs");
 	if (!allOCs || allOCs.length === 0) return null;
-	let candidates = allOCs.filter((o) => o.name !== "Test Character");
+	let candidates = allOCs.filter((o) => {
+		if (o.name === "Test Character") return false;
+		const tC = new Mun(o.mun);
+		return tC.status !== "Archived";
+	});
 	if (excludeMun) candidates = candidates.filter((o) => o.mun !== excludeMun);
 	if (candidates.length === 0) return null;
 	const idx = Math.floor(Math.random() * candidates.length);
