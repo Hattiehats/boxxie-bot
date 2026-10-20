@@ -1,4 +1,4 @@
-import { getTableData } from './access_data.js';
+import { getData, getTableData } from './access_data.js';
 
 // Role IDs that grant admin/mod privileges
 export const ADMIN_ROLE_IDS = [
@@ -140,8 +140,13 @@ export function fuzzyMatchOnTable(query, limit = 25, table, field, subfield, sub
  * Prefix matches first, then contains matches.
  */
 export function fuzzyMatchOCNames(query, limit = 25) {
-	const ocs = getTableData('ocs');
+	let ocs = getTableData('ocs');
 	if (!ocs || !Array.isArray(ocs)) return [];
+	ocs = ocs.filter((oc) => {
+		const munData = getData("muns", "name", oc.mun);
+		return !!munData && munData.status !== "Archived";
+	});
+
 	if (!query) return ocs.slice(0, limit).map(oc => oc.name);
 
 	const lower = query.toLowerCase();

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { addStandardFormat } from '../utility/format_embed.js';
-import { getTableData } from '../utility/access_data.js';
+import { getData, getTableData } from '../utility/access_data.js';
 import { Character } from '../utility/classes.js';
 
 const COMPARE_FIELDS = [
@@ -119,7 +119,12 @@ export default {
 		await interaction.editReply({ embeds: [buildCompareEmbed(characters, fields)] });
 	},
 	async autocomplete(interaction) {
-		let choices = getTableData('ocs').map(row => row.name);
+		let choices = getTableData('ocs')
+			.filter((oc) => {
+				const munData = getData("muns", "name", oc.mun);
+				return !!munData && munData.status !== "Archived";
+			})
+			.map(row => row.name);
 		const focusedValue = interaction.options.getFocused();
 		let filtered = choices.filter(choice =>
 			choice.toLowerCase().startsWith(focusedValue.toLowerCase())

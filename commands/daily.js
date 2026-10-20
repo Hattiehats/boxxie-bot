@@ -48,8 +48,9 @@ export function getRandomOC(excludeMun) {
 	if (!allOCs || allOCs.length === 0) return null;
 	let candidates = allOCs.filter((o) => {
 		if (o.name === "Test Character") return false;
-		const tC = new Mun(o.mun);
-		return tC.status !== "Archived";
+		const munData = getData("muns", "name", o.mun);
+		if (!munData) return false;
+		return munData.status !== "Archived";
 	});
 	if (excludeMun) candidates = candidates.filter((o) => o.mun !== excludeMun);
 	if (candidates.length === 0) return null;
