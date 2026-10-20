@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Client } from 'discord.js';
 // import { AB_DATA } from '../initialize-data.js';
 import { addStandardFormat } from '../utility/format_embed.js';
-import { getTableData } from '../utility/access_data.js';
+import { getTableData, getData } from '../utility/access_data.js';
 import { Character } from '../utility/classes.js';
 
 export default {
