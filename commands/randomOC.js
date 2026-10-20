@@ -41,8 +41,8 @@ export default {
 		let embedMessage;
 		if (choice === 'oc') {
 			embedMessage = new EmbedBuilder()
-				.setTitle('🎲 Pick Random Character <a:catchair:1462583100352626893>')
-				.setDescription(`I pick... **${character.name}!**`)
+				.setTitle('OC Selection (Random)')
+				.setDescription(`**SELECTED: ${character.name}!**`)
 				.setThumbnail(character.image)
 
 		} else {
@@ -51,9 +51,8 @@ export default {
 			const character2 = new Character(characterNames[secondNumber]);
 
 			embedMessage = new EmbedBuilder()
-				.setTitle('🎲 Pick Random OC Pairing <:shouldergrab:1462601546993762458>')
-				.setDescription(`I pick... **${character.name}** and **${character2.name}!**`)
-
+				.setTitle('OC SELECTION (Pairing)')
+				.setDescription(`SELECTED: **${character.name}** AND **${character2.name}!**`)
 		}
 
 		embedMessage = addStandardFormat(embedMessage);
@@ -78,12 +77,12 @@ export default {
 			if (secondNumber === randomNumber) secondNumber = (secondNumber + 1) % characterNames.length;
 			const character2 = new Character(characterNames[secondNumber]);
 			embedMessage = new EmbedBuilder()
-				.setTitle('🎲 Pick Random OC Pairing')
-				.setDescription(`I pick... **${character.name}** and **${character2.name}!**`);
+				.setTitle('OC SELECTION (Pairing)')
+				.setDescription(`SELECTED: **${character.name}** AND **${character2.name}!**`)
 		} else {
 			embedMessage = new EmbedBuilder()
-				.setTitle('🎲 Pick Random Character')
-				.setDescription(`I pick... **${character.name}!**`)
+				.setTitle('OC Selection (Random)')
+				.setDescription(`**SELECTED: ${character.name}!**`)
 				.setThumbnail(character.image);
 		}
 		embedMessage = addStandardFormat(embedMessage);
