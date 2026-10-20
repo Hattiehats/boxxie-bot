@@ -29,7 +29,7 @@ export default {
 
 		let characterNames = getTableData('ocs')
 		characterNames = characterNames.filter((row) => {
-			const munData = getData("muns", "name", row.name);
+			const munData = getData("muns", "name", row.mun);
 			return (row.name !== 'Test Character' &&
 				!!munData &&
 				munData.status !== 'Archived');
@@ -65,7 +65,7 @@ export default {
 		const choice = args?.toLowerCase()?.trim();
 		let characterNames = getTableData('ocs');
 		characterNames = characterNames.filter((row) => {
-			const munData = getData("muns", "name", row.name);
+			const munData = getData("muns", "name", row.mun);
 			return (row.name !== 'Test Character' &&
 				!!munData &&
 				munData.status !== 'Archived');
