@@ -49,6 +49,11 @@ function viewStats(OC) {
 				inline: true
 			},
 			{
+				name: "`MLE:`",
+				value: `${OC.currentStats.mle}`,
+				inline: true
+			},
+			{
 				name: "`RGD:`",
 				value: `${OC.currentStats.rgd}`,
 				inline: true
