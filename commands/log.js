@@ -156,12 +156,7 @@ function formatBreakdown(entry) {
 	const lines = [];
 	let label = `${entry.type} × ${entry.quantity}`;
 	if (entry.modifiers.length > 0) {
-		const modNames = [];
-		entry.modifiers.map(m => {
-			if (m.includes('NPC')) modNames.push('NPC');
-			if (m.includes('BG')) modNames.push('BG');
-		});
-		label += ` (${modNames.join(', ')})`;
+		label += ` (${entry.modifiers.join(', ')})`;
 	}
 	lines.push(`${label} = ${entry.totalPayout.toLocaleString()} Capital`);
 
